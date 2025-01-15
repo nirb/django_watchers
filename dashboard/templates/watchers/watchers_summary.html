@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_filters %}
+{% block content %}
+<div>
+    <div class="container-fluid text-center mx-0 px-0">
+        {% include "watchers/watchers_cards_summary.html" %}
+        <div class="align-items-center">
+            <div class="col-sm-12 p-2">
+                {% for s in summary %}
+                {% include "tables/invesment_summary.html" with summary=s %}
+                {% endfor %}
+            </div>
+            <div class="row align-items-center data-container">
+                <div class="col-md-10 col-sm-12" id="watchers_table_summary">
+                    {% include "watchers/watchers_table_summary.html" %}
+                </div>
+                <!-- show the doughnut chart here -->
+                <div class="col-md-2 col-sm-12">
+                    <div id="doughnut-chart" class="d-flex justify-content-center"></div>
+                </div>
+            </div>
+        </div>
+        {% with s=monthly_statements_data %}
+        {% with d=monthly_distribution_data %}
+        {% with w=monthly_wire_data %}
+        {% include "tables/monthly_tabs.html" with statements=s distributions=d wire=w %}
+        {% endwith %}
+        {% endwith %}
+        {% endwith %}
+    </div>
+</div>
+</div>
+<script>
+    const chartData = {{ chart_data| safe }};
+</script>
+<script src="{% static 'js/doughnut_chart.js' %}"></script>
+{% endblock %}

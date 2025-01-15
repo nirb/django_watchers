@@ -1,0 +1,30 @@
+<div class="data-container" style="margin-bottom: 8px; overflow-x: auto; cursor: pointer;"
+    onclick="window.location.href = '/watchers/{{summary.currency}}'">
+    <div class="data-grid data-grid-6">
+        <div class="data-value" style="display: flex; align-items: center;">
+            <div style="margin: 0 auto;">
+                {{summary.currency}}
+            </div>
+        </div>
+        <div class="data-item">
+            <span class="data-label">Value</span>
+            <span class="data-value">{{ summary.value }}</span>
+        </div>
+        <div class="data-item">
+            <span class="data-label">Invested</span>
+            <span class="data-value">{{ summary.invested }}</span>
+        </div>
+        <div class="data-item">
+            <span class="data-label">Unfunded</span>
+            <span class="data-value">{{ summary.unfunded }}</span>
+        </div>
+        <div class="data-item">
+            <span class="data-label">ITD</span>
+            <span class="data-value">{{ summary.ITD }}</span>
+        </div>
+        <div class="data-item">
+            <span class="data-label">YTD</span>
+            <span class="data-value">{{ summary.YTD }}</span>
+        </div>
+    </div>
+</div>

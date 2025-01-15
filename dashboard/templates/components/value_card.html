@@ -1,0 +1,35 @@
+<div class="card data-container" title="{{ info }}">
+    <div class="card-body" style="padding: 8px;">
+        <h5 class="card-title">
+            <div class="row">
+                <div class="col sm=2"></div>
+                <div class="col sm=8 app_main_color" style="font-style: italic; font-size: medium;">{{title}}</div>
+                <div class="col sm=2 text-right">
+                    {% if info %}
+                    <i class="fas fa-info-circle app_main_color" title="{{ info }}" data-toggle="modal"
+                        data-target="#infoModal" style="font-size: small;"></i>
+                    {% endif %}
+                </div>
+            </div>
+        </h5>
+        <div class="card-text row">
+            {% for v in values %}
+            <div class="data-value highlight col">{{ v.value }}</div>
+            {% endfor %}
+        </div>
+        <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <h3 class="modal-body app_main_color">
+                        {{ info }}
+                    </h3>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+    </div>
+</div>

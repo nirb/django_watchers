@@ -1,0 +1,13 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/cards.css' %}">
+
+<div class="card l-bg-blue-light" style="width: 100%;">
+    <div class="card-body btn btn-primary" onclick="window.location.href='{{ url }}'">
+        <h5 class="card-title" style="text-decoration: underline;">{{ title }}</h5>
+        <div class="d-flex flex-wrap">
+            {% for item in items %}
+            <span class="badge bg-primary me-2">{{ item }}</span>
+            {% endfor %}
+        </div>
+    </div>
+</div>

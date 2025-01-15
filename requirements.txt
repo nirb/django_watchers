@@ -1,0 +1,9 @@
+psycopg2-binary
+django
+openai
+PyPDF2
+pandas
+scipy
+numpy-financial
+PyMySQL
+gunicorn

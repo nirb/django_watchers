@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2>
+        {% if edit %}
+        Edit
+        {% else %}
+        Add
+        {% endif %}
+        Event
+    </h2>
+    <form method="post" class="p-3 form-border">
+        {% csrf_token %}
+        <div class="form-group">
+            <label id="parent" for="id_parent">Watcher</label>
+            {{ form.parent }}
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="id_parent">Value</label>
+                {{ form.value }}
+            </div>
+            <div id="type" class="form-group col-md-4">
+                <label for="id_parent">Type</label>
+                {{ form.type }}
+            </div>
+            <div class="form-group col-md-4">
+                <label for="id_parent">Date</label>
+                {{ form.date }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label id="description" for="id_parent">Description</label>
+            {{ form.description }}
+        </div>
+        <div class="text-right">
+            <a href="{{cancel_url}}" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">
+                {% if edit %}
+                Update
+                {% else %}
+                Add
+                {% endif %}
+            </button>
+        </div>
+    </form>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const type_element = document.getElementById('id_type');
+        const description_element = document.getElementById('id_description');
+
+        // Submit the form automatically when a file is selected
+        type_element.addEventListener("change", () => {
+            description_element.innerHTML = type_element.value
+        });
+    });
+</script>
+{% endblock %}

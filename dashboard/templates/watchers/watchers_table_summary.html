@@ -1,0 +1,28 @@
+<div class="table-container d-none d-md-block">
+    <table class="table table-striped table-bordered table-sm p-0">
+        <thead>
+            <tr>
+                <th>Value</th>
+                <th>Value in USD</th>
+                <th>Value in NIS</th>
+                <th>Value in EUR</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for current_value in current_values %}
+            <tr class="clickable-row">
+                <td>{{ current_value.value }}</td>
+                <td>{{ current_value.value_usd }}</td>
+                <td>{{ current_value.value_nis }}</td>
+                <td>{{ current_value.value_eur }}</td>
+            </tr>
+            {% endfor %}
+            <tr class="clickable-row">
+                <td>Unfunded</td>
+                <td>{{unfunded.USD}}</td>
+                <td>{{unfunded.NIS}}</td>
+                <td>{{unfunded.EUR}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

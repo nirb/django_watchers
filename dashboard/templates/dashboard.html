@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_filters %}
+{% block content %}
+<div class="row">
+    <!-- show the summary card -->
+    {% with card=summary_card %}
+    {% with type='summary_card' %}
+    <div class="col-sm-12 mb-2 mt-2">
+        {% include "components/card.html" %}
+    </div>
+    {% endwith %}
+    {% endwith %}
+    <!-- show the currency cards -->
+    {% for card in currency_cards %}
+    {% with card=card %}
+    {% with type='items_card' %}
+    <div class="col-sm-4 mb-2">
+        {% include "components/card.html" %}
+    </div>
+    {% endwith %}
+    {% endwith %}
+    {% endfor %}
+</div>
+{% endblock %}

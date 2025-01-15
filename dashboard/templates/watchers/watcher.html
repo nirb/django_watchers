@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+{% if error %}
+<h3 style="color: red;">{{error}}</h3>
+{% else %}
+<div>
+    <center>
+        <h3 class="app_main_color" style="display: inline; font-style: italic;">
+            {{name}}
+        </h3>
+        <h3 class="app_main_color" style="display: inline; padding-left: 8pk; padding-right: 8px;">
+            -
+        </h3>
+        <h3 class="app_main_color" style="display: inline; font-weight: bold;">
+            {{watcher_info.value}}
+        </h3>
+    </center>
+    <h6>Advisor - {{watcher.advisor.name}}</h6>
+    {% include "watchers/watcher_fin_info.html" %}
+    {% with s=watcher.monthly_statements_data %}
+    {% with d=watcher.monthly_distribution_data %}
+    {% with w=watcher.monthly_wire_data %}
+    {% include "tables/monthly_tabs.html" with statements=s distributions=d wire=w %}
+    {% endwith %}
+    {% endwith %}
+    {% endwith %}
+    {% include "events/events.html" %}
+</div>
+{% endif %}
+{% endblock %}

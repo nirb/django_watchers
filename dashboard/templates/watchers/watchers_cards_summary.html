@@ -1,0 +1,31 @@
+<div class="row" id="watchers-cards-summary">
+    {% with template="components/value_card.html" %}
+    <div class="col-sm-6 p-2 order-first order-md-0">
+        {% with t="Current" %}
+        {% with v=current_values %}
+        {% with info="Shows the current investment values in each currency" %}
+        {% include template with title=t values=v info=info %}
+        {% endwith %}
+        {% endwith %}
+        {% endwith %}
+    </div>
+    <div class="col-sm-6 p-2">
+        {% with t="Currency Sum" %}
+        {% with v=currency_sum %}
+        {% with info="Shows the total investments sum in different currencies" %}
+        {% include template with title=t values=v info=info %}
+        {% endwith %}
+        {% endwith %}
+        {% endwith %}
+    </div>
+    <div class="col-sm-6 p-2">
+        {% with t="Distribution" %}
+        {% with v=currency_distribution %}
+        {% with info="Shows the distribution beteen currencies" %}
+        {% include template with title=t values=v info=info%}
+        {% endwith %}
+        {% endwith %}
+        {% endwith %}
+    </div>
+    {% endwith %}
+</div>

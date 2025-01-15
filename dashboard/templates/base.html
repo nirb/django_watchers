@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/tables.css' %}">
+
+    <link rel="icon" type="image/x-icon" href="{% static 'watcher/icons/favicon.png' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'app_name/icons/ios-180x180.png' %}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{% static 'watcher/icons/android-192x192.png' %}">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="{% static 'js/search.js' %}"></script>
+
+    <style>
+        /* Main content */
+        main {
+            margin-left: 0px;
+            padding: 0px 20px;
+            background-color: lightgray;
+        }
+
+        table thead {
+            background-color: var(--primary-main-color);
+            color: white;
+        }
+
+        .app_main_color {
+            color: var(--primary-main-color);
+        }
+
+        .app_bg_color {
+            background-color: var(--primary-main-color);
+        }
+    </style>
+    <title>{% block title %}Watchers AI{% endblock %}</title>
+</head>
+
+<body style="background-color: lightgray;">
+    {% if user.is_authenticated %}
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <div class="hstack gap-3">
+                <a class="navbar-brand" href="/">
+                    <i class="fa-regular fa-eye app_main_color"></i>
+                </a>
+                {% if request.path != '/menues/' %}
+                <a href="/menues" class="nav-item">
+                    Menu
+                </a>
+                {% endif %}
+            </div>
+            <!-- Toggler Button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Collapsible Content -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <!-- Navbar Items with margin between them -->
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-flex"></ul>
+                <!-- Search Form -->
+                <form class="d-flex" role="search">
+                    <input class="form-control form-control-sm d-lg-block p-0" id="searchBox" type="search"
+                        placeholder="Search" aria-label="Search"
+                        onkeypress="if(event.key === 'Enter') { searchResults(this.value); event.preventDefault(); }"
+                        oninput="if(this.value === '') {     
+                            const searchResults = document.getElementById('searchResults');
+                            searchResults.innerHTML = ''; 
+                            event.preventDefault();
+                            window.location.reload();}">
+                </form>
+                <div class="nav-item me-2"> <!-- Added margin-end -->
+                    <a class="nav-link dropdown-toggle d-lg-none" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        More
+                    </a>
+                    {% include 'menues/dropdown_menu.html' %}
+                    <div class="btn-group dropstart d-none d-lg-block">
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                            aria-expanded="false" style="background-color: white;">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        {% include 'menues/dropdown_menu.html' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- Main Content -->
+    <main>
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <script>
+                setTimeout(function () {
+                    $('.alert').alert('close');
+                }, 10000); // 10 seconds
+            </script>
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        <div id="searchResults" />
+        <div id="content" name="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    {% endif %}
+</body>
+
+
+</html>

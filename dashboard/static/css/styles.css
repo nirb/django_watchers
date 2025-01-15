@@ -1,0 +1,122 @@
+:root {
+    --primary-light-color: #757ce8;
+    --primary-main-color: #246bdf;
+    --primary-dark-color: #002884;
+    --primary-contrastText-color: #fff;
+
+    --secondary-light-color: #ff7961;
+    --secondary-main-color: #f44336;
+    --secondary-dark-color: #ba000d;
+    --secondary-contrastText-color: #000;
+}
+
+/* Global styles dark mode */
+/* body {
+    background-color: #212529;
+    color: #fff;
+}
+
+.bg-primary {
+    background-color: black !important;
+}
+
+.bg-light {
+    background-color: #343a40 !important;
+}
+
+.text-light {
+    color: #fff !important;
+} */
+
+
+
+/* Hide the button by default */
+.mobile-button {
+    display: none;
+}
+
+.data-bg {
+    background-color: #f2f2f2;
+}
+
+.data-container {
+    width: 100%;
+    padding: 4px;
+    background: #f2f2f2;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
+}
+
+
+.data-item {
+    padding: 2px;
+    background: #f8f8f8;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.data-label {
+    color: #555555;
+    display: block;
+    font-style: italic;
+    font-size: small;
+    font-weight: bold;
+}
+
+.data-value {
+    font-weight: bold;
+    color: #333333;
+    font-size: 1em;
+}
+
+.highlight {
+    color: #007bff;
+    font-weight: bold;
+}
+
+.data-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    /* Default for smaller screens */
+    gap: 8px;
+}
+
+/* Media query for larger screens */
+@media (min-width: 1024px) {
+    .data-grid-4 {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .data-grid-5 {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .data-grid-6 {
+        grid-template-columns: repeat(6, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .mobile-hide {
+        display: none;
+    }
+}
+
+.table-container {
+    overflow-y: auto;
+}
+
+.form-border {
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 8px;
+    border-color: var(--primary-light-color);
+}

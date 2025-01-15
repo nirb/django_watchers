@@ -1,0 +1,26 @@
+<div>
+    <form method="post">
+        {% csrf_token %}
+        <div style="margin-bottom: 1rem;">
+            <!-- Name Field on a Single Line -->
+            <label for="id_name">Watcher Name:</label>
+            {{ watcher_form.name }}
+        </div>
+        <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+            <!-- Advisor, Currency, and Type Fields on One Line -->
+            <div>
+                <label for="id_advisor">Advisor:</label>
+                {{ watcher_form.advisor }}
+            </div>
+            <div>
+                <label for="id_currency">Currency:</label>
+                {{ watcher_form.currency }}
+            </div>
+            <div>
+                <label for="id_type">Type:</label>
+                {{ watcher_form.type }}
+            </div>
+        </div>
+        <button type="submit" name="new_watcher_submit">Create Watcher</button>
+    </form>
+</div>

@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block content %}
+<div>
+    {% if file_name %}
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden" />
+    </div>
+    <h4 id="status" class="app_main_color">Analyzing {{ file_name }}/></h4>
+    {% else %}
+    <div id="spinner" class="spinner-border text-primary" role="status" style="display: none;">
+        <span class="visually-hidden" />
+    </div>
+    <div id="form_container">
+        <h2 class="app_main_color">Select a File for AI Analyzing</h2>
+        <form id="file-upload-form" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <!-- Hidden file input -->
+            <input type="file" id="file-input" name="file" style="display: none;" />
+
+            <!-- Custom button -->
+            <button type="button" id="custom-upload-button" class="btn btn-primary"
+                style="background-color: var(--primary-main-color);">
+                Select File
+            </button>
+
+            {% include 'home_button.html' %}
+
+        </form>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const fileInput = document.querySelector('input[type="file"]');
+        const form = document.getElementById("file-upload-form");
+        const customButton = document.getElementById('custom-upload-button');
+        const form_container = document.getElementById('form_container');
+        const spinner = document.getElementById('spinner');
+
+        customButton.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Automatically trigger the file selection dialog
+        if (!fileInput.files.length) {
+            fileInput.click();
+        }
+
+        // Submit the form automatically when a file is selected
+        fileInput.addEventListener("change", () => {
+            if (fileInput.files.length > 0) {
+                form.submit();
+                form_container.style.display = "none"
+                spinner.style.display = "block"
+            }
+        });
+    });
+
+    function checkTaskStatus(taskId) {
+        if (!taskId || taskId.trim().length < 2) return; // Ensure taskId is valid
+        console.log("checkTaskStatus", taskId);
+
+        fetch(`/get_parallel_task_status/${taskId}/`)
+            .then(response => response.json())
+            .then(data => {
+                console.log("status", data.status);
+                if (data.status === '{{ task_completed }}') {
+                    window.location.href = "/create_event/";
+                } else {
+                    setTimeout(() => checkTaskStatus(taskId), 500);
+                }
+            });
+    }
+
+    // Start checking the task status if task_id exists
+    checkTaskStatus('{{ task_id }}');
+</script>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+<div>
+    <h3 class="app_main_color">New Event</h3>
+    {% if watcher_found %}
+    <!-- Watcher data is found -->
+    <h2>Watcher: {{ watcher_name }}</h2>
+    <h3>Event Data</h3>
+    <ul>
+        {% for key, value in event_data.items %}
+        <li><strong>{{ key }}:</strong> {{ value }}</li>
+        {% endfor %}
+        <form method="post">
+            {% csrf_token %}
+            {{ event_form.as_p }}
+            <button type="submit" class="btn btn-primary">Add Event</button>
+            {% include 'home_button.html' with button_text="Cancel" %}
+        </form>
+    </ul>
+    {% else %}
+    <!-- Watcher not found -->
+    <div class="border border-primary p-3">
+        <!-- Option: Create new watcher -->
+        <h3>Create New Watcher</h3>
+        {% include 'watchers/create_watcher_form.html' %}
+    </div>
+    <div>
+        {% if watcher_names %}
+        <h3 class="app_main_color">OR...</h3>
+        <div class="border border-primary p-3">
+            <!-- Option: Select from existing watchers -->
+            <h3>Select existing Watcher</h3>
+            <form action="{% url 'select_watcher' %}" method="post">
+                {% csrf_token %}
+                <label for="existing_watcher">Choose a watcher:</label>
+                <select id="existing_watcher" name="existing_watcher" required>
+                    {% for name in watcher_names %}
+                    <option value="{{ name }}">{{ name }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Select</button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% load custom_filters %}
+{% block content %}
+{% if data %}
+{% for currency, yearly_data in data.items %}
+<div class="table-responsive" id="monthly-table">
+    <table class="table table-borderless table-sm">
+        <thead>
+            <tr>
+                <th style="width: 5%;">Year</th>
+                {% for month in 12|number_range %} {# Use the custom tag #}
+                <th style="width: 7.916%;">{{ month|month_name }}</th> {# Use the new filter #}
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for year, monthly_values in yearly_data.items %}
+            <tr>
+                <td style="padding-top: 2px; padding-bottom: 2px;">{{ year }}</td>
+                {% for month in 12|number_range %}
+                {% with value=monthly_values|get_item:month %}
+                <td style="padding-top: 2px; padding-bottom: 2px;">{{value}}</td>
+                {% endwith %}
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endfor %}
+{% else %}
+<p style="color:red;">No data available.</p>
+{% endif %}
+{% endblock %}

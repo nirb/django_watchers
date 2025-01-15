@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load custom_filters %}
+{% block content %}
+<div>
+    <h2 class="mb-4">{{ watcher_name }} - {{ currency }}</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Year</th>
+                <th>Jan</th>
+                <th>Feb</th>
+                <th>Mar</th>
+                <th>Apr</th>
+                <th>May</th>
+                <th>Jun</th>
+                <th>Jul</th>
+                <th>Aug</th>
+                <th>Sep</th>
+                <th>Oct</th>
+                <th>Nov</th>
+                <th>Dec</th>
+                <th>YTD</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for year, months in pivot_dict.items %}
+            <tr>
+                <td>{{ year }}</td>
+                {% for month in months_range %}
+                <td>{{ months|get_item:month|default:0|format_value }}</td>
+                {% endfor %}
+                <td>{{ months|get_item:'YTD'|default:0|format_value }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
