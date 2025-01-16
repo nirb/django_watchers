@@ -65,6 +65,7 @@ class Event(models.Model):
         ('Statement', 'Statement'),
         ('Distribution', 'Distribution'),
         ('Pending Distribution', 'Pending Distribution'),
+        ('Pending Capital Call', 'Pending Capital Call'),
         ('Wire Receipt', 'Wire Receipt'),
         ('Commitment', 'Commitment'),
     ]

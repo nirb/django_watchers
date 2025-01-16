@@ -8,8 +8,8 @@ def menu_view(request):
         "menues": [
             {"title": "Show Recent Events",
                 "url": "/recent_events/-date", "items": []},
-            {"title": "Show Recent Events",
-             "url": "/recent_events/-date", "items": []},
+            {"title": "Show Pending Events",
+             "url": "/recent_events/date?type=pending", "items": []},
             {"title": "Read", "url": "/", "items": []},
             {"title": "Update", "url": "/", "items": []},
             {"title": "Delete", "url": "/", "items": []},

@@ -24,6 +24,8 @@ urlpatterns = [
          delete_watcher, name='delete_watcher'),
     path('search_watchers/<str:search_string>/',
          search_watchers, name='get_watchers_list'),
+    path("watchers_plots_data/<str:search_string>/",
+         watchers_plots_data, name='watchers_plots_data'),
 
     # events
     path('events/<str:watcher_id>/', EventListView.as_view(), name='event-list'),

@@ -211,3 +211,20 @@ def get_currency_card(currency):
                       {'text_left': 'Distribution',
                        "text_right":  watchersFin.currency_distribution[currency], 'icon': 'fa-moon'}
                       ]}
+
+
+def watchers_plots_data(request, search_string):
+    if request.method == "GET":
+        watchers = watchersFin.get_watchers(request.user.id)
+        watchers = watchers.filter(
+            Q(name__icontains=search_string) | Q(currency__icontains=search_string) | Q(advisor__name__icontains=search_string))
+        watchers = watchers.order_by(NAME)
+        ret = []
+        for w in watchers:
+            watcherInfo = watchersFin.get_watcher_info(w.id)
+            ret.append({"name": w.name, "id": w.id,
+                        "currency": w.currency,
+                        "value": int_to_str(watcherInfo[VALUE], w.currency) if watcherInfo else 0,
+                        "advisor": w.advisor.name})
+        return JsonResponse(ret, safe=False)
+    return JsonResponse({'error': 'Invalid request method'}, status=400)

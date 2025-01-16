@@ -235,8 +235,15 @@ def edit_event(request, event_id):
 
 
 def events_cards(request, order_by='-date'):
+    query_params = request.GET.dict()
+    print(f"events_cards query_params: {query_params}")
     events = Event.objects.filter(
-        parent__user=request.user).order_by(order_by)[:50]
+        parent__user=request.user)
+
+    if "type" in query_params:
+        events = events.filter(type__icontains=query_params["type"])
+
+    events = events.order_by(order_by)[:50]
 
     menues = [{"title": event.parent.name, "url": f"/watcher/{event.parent.id}",
                "items": [event.date, event.type, event.value]}
