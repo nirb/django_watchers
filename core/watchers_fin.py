@@ -1,8 +1,10 @@
 
+import json
 from core.defs import *
 from core.fin_calcs import calculate_investment_info
+from core.monthly_values import get_monthly_values
 from dashboard.models import Watcher
-from utils.converters import currency_conversion, currency_to_color, currency_to_name, int_to_str
+from utils.converters import currency_conversion, int_to_str
 from utils.debug import d_print, debug_func
 
 
@@ -130,3 +132,25 @@ class WatchersFin:
         if watcher_qs:
             return watcher_qs[0]
         return None
+
+    def get_watchers_sum_per_month(self, user_id, currency, events_type):
+        watchers = self.get_watchers(user_id).filter(currency=currency)
+        total_sum_per_month = {}
+        for watcher in watchers:
+            # watchersInfo.update_watcher_data_over_time(watcher)
+            if watcher.name == "Kingdom Fund 15":
+                print("here")
+            events = watcher.get_events(events_type)[::-1]
+            monethly_values = get_monthly_values(events, currency)
+
+            for item in monethly_values["values"]:
+                for date_str, value in item.items():
+                    if date_str in total_sum_per_month:
+                        total_sum_per_month[date_str] += value
+                    else:
+                        total_sum_per_month[date_str] = value
+
+            # print("get_watchers_sum_per_month", watcher.name,
+            #      json.dumps(monethly_values, indent=2))
+        sorted_sum = dict(sorted(total_sum_per_month.items()))
+        return [{"date": date_str, "value": value} for date_str, value in sorted_sum.items()]

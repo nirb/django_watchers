@@ -10,17 +10,48 @@ from .views.menu import *
 
 from .views.ai import ai_view
 
-from dotenv import load_dotenv
 import os
 
 # Load environment variables from the .env file
-load_dotenv()
+
+
+def load_env_variables(env_file_path=".env"):
+    """
+    Load variables from a .env file into the OS environment manually.
+
+    Args:
+        env_file_path (str): Path to the .env file. Default is ".env".
+    """
+    try:
+        with open(env_file_path, "r") as file:
+            for line in file:
+                # Strip whitespace and ignore comments or empty lines
+                line = line.strip()
+                if not line or line.startswith("#"):
+                    continue
+
+                # Split key-value pairs
+                if "=" in line:
+                    key, value = line.split("=", 1)
+                    key = key.strip()
+                    value = value.strip().strip('"').strip("'")  # Remove surrounding quotes
+
+                    # Set the environment variable
+                    os.environ[key] = value
+
+        print(f"Environment variables loaded from {env_file_path}.")
+    except FileNotFoundError:
+        print(f".env file not found at {env_file_path}.")
+    except Exception as e:
+        print(f"Error loading environment variables: {e}")
+
+
+load_env_variables()
 
 
 urlpatterns = [
     # watchers
     path('', dashboard_view, name='dashboard'),
-    path('db', dashboard_view_old, name='dashboard'),
     path('watchers/', watchers_view, name='watchers'),
     path('watchers/<str:currency>/', watchers_currency, name='watchers'),
     path('watcher/<int:watcher_id>/', watcher_view, name='watchers'),

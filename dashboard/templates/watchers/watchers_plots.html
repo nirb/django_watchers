@@ -5,16 +5,22 @@
 <div class="spinner-border text-primary" role="status">
     <span class="visually-hidden">Loading...</span>
 </div>
+<div class="row m-0 p-0">
+    <div class="col mx-2 p-0" id="USD_plot"></div>
+    <div class="col mx-2 p-0" id="NIS_plot"></div>
+    <div class="col mx-2 px-2" id="EUR_plot"></div>
+</div>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         fetchWatchersPlotsData("USD", on_done);
+        fetchWatchersPlotsData("NIS", on_done);
+        fetchWatchersPlotsData("EUR", on_done);
     });
 
-    function on_done(data) {
-        console.log("got rsp");
+    function on_done(data, currency) {
         document.querySelector('.spinner-border').style.display = 'none';
-
-        //renderPlots(data);
+        generateCurrencyPlot(data, currency, "", "", currency + "_plot");
     }
 </script>

@@ -43,8 +43,12 @@ class Watcher(models.Model):
 
     # return all events of the watcher,
     # in case of investment watcher add a statement event with 0 value as the first event
-    def get_events(self):
-        events = list(self.events.all().order_by('-date'))
+    def get_events(self, filter_type=None):
+        if filter_type:
+            events = list(self.events.filter(
+                type=filter_type).order_by('-date'))
+        else:
+            events = list(self.events.all().order_by('-date'))
         if len(events) > 0 and self.type in INVESTMENT_WATCHER_TYPES:
             # Add a statement event with 0 value as the first event
             events.append(Event(

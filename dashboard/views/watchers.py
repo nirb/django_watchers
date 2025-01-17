@@ -30,31 +30,22 @@ def dashboard_view(request):
 
 
 @login_required
-def dashboard_view_old(request):
-    clear_cache_if_needed()
-    if request.method == "GET":
-        context = {"watchers_path": False}
-        context.update(watchersInfo.get(request.user.id))
-        return render(request, 'watchers/watchers_summary.html', context)
-
-
-@login_required
 def watchers_view(request):
+    # show watchers table with currency tabs
     clear_cache_if_needed()
     if request.method == "GET":
-        context = {"watchers_path": True}
-        context.update(watchersInfo.get(request.user.id))
-        return render(request, 'watchers/watchers.html', context)
+        return render(request, 'watchers/watchers.html', watchersInfo.get(request.user.id))
 
 
 @login_required
 def watchers_currency(request, currency):
+    # show watchers table with currency tabs (selected currency)
     clear_cache_if_needed()
     if request.method == "GET":
         wi = watchersInfo.get(request.user.id)
         context = {"currency_groups": {
             currency: wi["currency_groups"][currency]}}
-        for c in CURRENCY_TYPES:
+        for c in CURRENCY_TYPES:  # add all other currencies
             if c != currency:
                 context["currency_groups"][c] = wi["currency_groups"][c]
         return render(request, 'watchers/watchers.html', context)
@@ -214,17 +205,7 @@ def get_currency_card(currency):
 
 
 def watchers_plots_data(request, search_string):
-    if request.method == "GET":
-        watchers = watchersFin.get_watchers(request.user.id)
-        watchers = watchers.filter(
-            Q(name__icontains=search_string) | Q(currency__icontains=search_string) | Q(advisor__name__icontains=search_string))
-        watchers = watchers.order_by(NAME)
-        ret = []
-        for w in watchers:
-            watcherInfo = watchersFin.get_watcher_info(w.id)
-            ret.append({"name": w.name, "id": w.id,
-                        "currency": w.currency,
-                        "value": int_to_str(watcherInfo[VALUE], w.currency) if watcherInfo else 0,
-                        "advisor": w.advisor.name})
-        return JsonResponse(ret, safe=False)
-    return JsonResponse({'error': 'Invalid request method'}, status=400)
+    ret = watchersFin.get_watchers_sum_per_month(
+        request.user.id, search_string, STATEMENT_EVENT_TYPE)
+
+    return JsonResponse(ret, safe=False)
