@@ -8,4 +8,4 @@ scp -i ../aws/ec2-tlv-general.pem watchers_aws.tar ec2-user@51.17.183.233:/home/
 echo "Removing watchers_aws image....."
 rm watchers_aws.tar
 echo "Deploying on ec2....."
-ssh -i ../aws/ec2-tlv-general.pem ec2-user@51.17.183.233 'bash -s' < build_and_deploy/deploy_on_aws.sh
+ssh -i ../aws/ec2-tlv-general.pem ec2-user@51.17.183.233 'bash -s' < scripts/deploy_on_aws.sh
