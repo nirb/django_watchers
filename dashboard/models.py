@@ -64,8 +64,8 @@ class Event(models.Model):
     EVENT_TYPE_CHOICES = [
         ('Statement', 'Statement'),
         ('Distribution', 'Distribution'),
-        ('Pending Distribution', 'Pending Distribution'),
-        ('Pending Capital Call', 'Pending Capital Call'),
+        ('Distribution Notice', 'Distribution Notice'),
+        ('Capital Call Notice', 'Capital Call Notice'),
         ('Wire Receipt', 'Wire Receipt'),
         ('Commitment', 'Commitment'),
     ]

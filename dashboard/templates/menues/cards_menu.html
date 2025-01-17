@@ -5,7 +5,7 @@
     {% for menu in menues %}
     <div class="col-sm-6 pt-4 d-flex align-items-stretch">
         {% with html="components/action_card.html" %}
-        {% include html with title=menu.title items=menu.items url=menu.url%}
+        {% include html with title=menu.title items=menu.items url=menu.url bg=menu.background%}
         {% endwith %}
     </div>
     {% endfor %}

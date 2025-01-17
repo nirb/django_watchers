@@ -10,6 +10,13 @@ from .views.menu import *
 
 from .views.ai import ai_view
 
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from the .env file
+load_dotenv()
+
+
 urlpatterns = [
     # watchers
     path('', dashboard_view, name='dashboard'),
@@ -41,7 +48,7 @@ urlpatterns = [
          delete_event, name='delete_event'),
     path('events/edit/<int:event_id>/',
          edit_event, name='delete_event'),
-    path('recent_events/<str:order_by>', events_cards, name='recent_events'),
+    path('events_cards/<str:order_by>', events_cards, name='events_cards'),
 
 
     # actions

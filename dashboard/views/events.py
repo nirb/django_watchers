@@ -7,7 +7,7 @@ from dashboard.forms.event_form import EventForm, EventForm2
 from dashboard.forms.watcher_form import WatcherForm
 from dashboard.models import Event, Watcher
 from utils.cache import clear_cache_if_needed, is_analyze_ready
-from utils.converters import date_str_to_datetime, int_to_str
+from utils.converters import date_str_to_datetime, event_type_to_color, int_to_str
 import pandas as pd
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
@@ -246,7 +246,8 @@ def events_cards(request, order_by='-date'):
     events = events.order_by(order_by)[:50]
 
     menues = [{"title": event.parent.name, "url": f"/watcher/{event.parent.id}",
-               "items": [event.date, event.type, event.value]}
+               "background": event_type_to_color(event.type),
+               "items": [event.date, event.type, int_to_str(event.value, event.parent.currency)]}
               for event in events]
     return render(request, 'menues/cards_menu.html', {"menues": menues})
 

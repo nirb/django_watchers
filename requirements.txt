@@ -7,3 +7,4 @@ scipy
 numpy-financial
 PyMySQL
 gunicorn
+python-dotenv

@@ -6,6 +6,41 @@
     box-shadow: 0 0.46875rem 2.1875rem rgba(90, 97, 105, 0.1), 0 0.9375rem 1.40625rem rgba(90, 97, 105, 0.1), 0 0.25rem 0.53125rem rgba(90, 97, 105, 0.12), 0 0.125rem 0.1875rem rgba(90, 97, 105, 0.1);
 }
 
+.statement-color {
+    background: linear-gradient(to right, #4caf50, #8bc34a) !important;
+    /* Green shades */
+    color: #fff;
+}
+
+.distribution-color {
+    background: linear-gradient(to right, #2196f3, #64b5f6) !important;
+    /* Blue shades */
+    color: #fff;
+}
+
+.distribution-notice-color {
+    background: linear-gradient(to right, #ff9800, #ffc107) !important;
+    /* Orange shades */
+    color: #000;
+}
+
+.capital-call-color {
+    background: linear-gradient(to right, #ff5722, #ff8a65) !important;
+    /* Reddish-orange shades */
+    color: #fff;
+}
+
+.wire-receipt-color {
+    background: linear-gradient(to right, #673ab7, #9575cd) !important;
+    /* Purple shades */
+    color: #fff;
+}
+
+.commitment-color {
+    background: linear-gradient(to right, #009688, #4db6ac) !important;
+    /* Teal shades */
+    color: #fff;
+}
 
 .l-bg-blue-dark {
     background: linear-gradient(to right, blue, #4c4cff) !important;

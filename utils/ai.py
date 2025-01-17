@@ -2,8 +2,9 @@ from openai import OpenAI
 import PyPDF2
 import os
 
-
 # Function to extract text from PDF
+
+
 def extract_text_from_pdf(pdf_path, fd):
     if fd == None:
         fd = open(pdf_path, 'rb')
@@ -18,7 +19,8 @@ def extract_text_from_pdf(pdf_path, fd):
 
 
 def analyze_pdf_text(pre_text, text):
-    client = OpenAI(api_key=OPEN_API_KEY)
+    api_key = os.getenv('OPENAI_API_KEY')
+    client = OpenAI(api_key=api_key)
     # print("analyze_pdf_text start")
     response = client.chat.completions.create(
         model="gpt-4o-2024-08-06",

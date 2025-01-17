@@ -110,3 +110,20 @@ def date_str_to_datetime(date_str):
 def to_percent(value):
     """Convert a decimal value to a percentage string."""
     return f"{value:.2f}%" if value is not None else "N/A"
+
+
+def event_type_to_color(event_type):
+    if event_type == STATEMENT_EVENT_TYPE:
+        return "statement-color"
+    elif event_type == DISTRIBUTION_EVENT_TYPE:
+        return "distribution-color"
+    elif event_type == "Distribution Notice":
+        return "distribution-notice-color"
+    elif event_type == "Capital Call Notice":
+        return "capital-call-color"
+    elif event_type == WIRE_RECEIPT_EVENT_TYPE:
+        return "wire-receipt-color"
+    elif event_type == COMMITMENT_EVENT_TYPE:
+        return "commitment-color"
+
+    return "text-bg-success"

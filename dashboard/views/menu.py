@@ -7,9 +7,9 @@ def menu_view(request):
     context = {
         "menues": [
             {"title": "Show Recent Events",
-                "url": "/recent_events/-date", "items": []},
+                "url": "/events_cards/-date", "items": []},
             {"title": "Show Pending Events",
-             "url": "/recent_events/date?type=pending", "items": []},
+             "url": "/events_cards/date?type=notice", "items": []},
             {"title": "Read", "url": "/", "items": []},
             {"title": "Update", "url": "/", "items": []},
             {"title": "Delete", "url": "/", "items": []},
