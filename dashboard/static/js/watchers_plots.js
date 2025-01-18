@@ -1,9 +1,19 @@
-function fetchWatchersPlotsData(currency, on_done) {
-    fetch('/watchers_plots_data/' + currency)
+function fetchWatchersPlotsData(currency, events_type, on_done) {
+    fetch(`/watchers_plots_data?currency=${currency}&events_type=${events_type}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log(currency, data);
+            on_done(data, currency, events_type);
+        });
+}
+
+function fetchWatcherPlotsData(watcher_name, events_type, on_done) {
+    console.log("fetchWatcherPlotsData", watcher_name, events_type);
+    fetch(`/watcher_plots_data?watcher=${watcher_name}&events_type=${events_type}`)
         .then(response => response.json())
         .then(data => {
             console.log(data);
-            on_done(data, currency);
+            on_done(data, events_type);
         });
 }
 
@@ -15,8 +25,17 @@ function generateCurrencyPlot(data, title, xaxis_title, yaxis_title, plot_id) {
     var trace = {
         x: dates,
         y: values,
-        mode: 'lines',
-        type: 'scatter'
+        type: 'scatter',
+        mode: 'lines+markers',
+        line: {
+            shape: title.includes("Statement") ? "spline" : "line",   // Makes the line curved
+            color: "blue",     // Optional: Customize the color
+            width: 4           // Optional: Set the line width
+        },
+        marker: {
+            size: 6,           // Customize marker size
+            color: "red"       // Customize marker color
+        }
     };
 
     var layout = {

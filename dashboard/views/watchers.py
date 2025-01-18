@@ -204,8 +204,19 @@ def get_currency_card(currency):
                       ]}
 
 
-def watchers_plots_data(request, search_string):
-    ret = watchersFin.get_watchers_sum_per_month(
-        request.user.id, search_string, STATEMENT_EVENT_TYPE)
+def watchers_plots_data(request):
+    currency = request.GET.get('currency', None)
+    event_type = request.GET.get('events_type', None)
+    ret = watchersFin.get_watchers_sum_currency_per_month(
+        request.user.id, currency, event_type)
+
+    return JsonResponse(ret, safe=False)
+
+
+def watcher_plots_data(request):
+    watcher = request.GET.get('watcher', None)
+    event_type = request.GET.get('events_type', None)
+    ret = watchersFin.get_watcher_sum_per_month(
+        request.user.id, watcher, event_type)
 
     return JsonResponse(ret, safe=False)

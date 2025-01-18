@@ -16,6 +16,17 @@
         white-space: nowrap;
         text-align: center;
     }
+
+    th.sortable:hover {
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    .sorted::after {
+        content: '\2193';
+        /* Unicode for arrow down */
+        margin-left: 5px;
+    }
 </style>
 <ul class="nav nav-pills" role="tablist">
     {% for currency, watchers in currency_groups.items %}
@@ -28,11 +39,6 @@
     </li>
     {% endif %}
     {% endfor %}
-    <!-- <li class="nav-item ml-auto">
-        <button class="btn btn-primary mb-2" type="button" onclick="window.location.href='/create_watcher_form'">
-            <i class="fas fa-plus"></i> Add Watcher
-        </button>
-    </li> -->
 </ul>
 
 <div class="tab-content">
@@ -43,13 +49,13 @@
             <table class="table table-striped table-bordered table-sm">
                 <thead>
                     <tr>
-                        <th style="width: 30%; text-align: left;">Name</th>
-                        <th style="width: 10%;">Value</th>
-                        <th>Invested</th>
-                        <th class="mobile-hide">Dist-YTD</th>
-                        <th class="mobile-hide">Dist-ITD</th>
-                        <th>ROI</th>
-                        <th class="mobile-hide">Duration</th>
+                        <th class="sortable" data-column="name" style="width: 30%; text-align: left;">Name</th>
+                        <th class="sortable" data-column="value" style="width: 10%;">Value</th>
+                        <th class="sortable" data-column="invested">Invested</th>
+                        <th class="sortable mobile-hide" data-column="Dist_YTD">Dist-YTD</th>
+                        <th class="sortable mobile-hide" data-column="Dist_ITD">Dist-ITD</th>
+                        <th class="sortable" data-column="roi">ROI</th>
+                        <th class="sortable mobile-hide" data-column="years">Duration</th>
                         <th class="center">Actions</th>
                     </tr>
                 </thead>
@@ -120,20 +126,68 @@
                 window.location.href = "/watcher/" + watcherId;
             });
         });
+
+        const headers = document.querySelectorAll("th.sortable");
+        headers.forEach(header => {
+            header.addEventListener("click", () => {
+                headers.forEach(h => h.classList.remove("sorted"));
+                if (header.getAttribute("data-column") !== "name") {
+                    header.classList.add("sorted");
+                }
+                const column = header.getAttribute("data-column");
+                sortTable(column);
+            });
+        });
     });
 
-    function show_events_table(watcherId) {
-        event.stopPropagation();
-        console.log("show_events_table", watcherId)
-        window.location.href = "/events_table/" + watcherId;
+    function sortTable(column) {
+        const table = document.querySelector("table tbody");
+        const rows = Array.from(table.querySelectorAll("tr"));
+        const isNumericColumn = ["name  ", "roi", "years"].includes(column);
+        rows.sort((a, b) => {
+            let aText = a.querySelector(`td:nth-child(${getColumnIndex(column)})`).textContent.trim();
+            let bText = b.querySelector(`td:nth-child(${getColumnIndex(column)})`).textContent.trim();
+            let aInK = true
+            let bInK = true
+            if (!isNumericColumn) {
+                if (aText.includes("K")) {
+                    aText = aText.replace("K", "");
+                }
+                else {
+                    aInK = false
+                }
+                if (bText.includes("K")) {
+                    bText = bText.replace("K", "");
+                }
+                else {
+                    bInK = false
+                }
+                aText = aText.replace("$", "");
+                bText = bText.replace("$", "");
+            }
+            if (isNaN(parseFloat(aText)) || isNaN(parseFloat(bText))) {
+                return aText.localeCompare(bText);
+            }
+            else {
+                return (parseFloat(bText) * (bInK ? 1000 : 1)) - (parseFloat(aText) * (aInK ? 1000 : 1));
+            }
+        });
+
+        rows.forEach(row => table.appendChild(row));
     }
 
-    function show_watcher(watcherId) {
-        event.stopPropagation();
-        console.log("show_watcher", watcherId)
-        window.location.href = "/watcher/" + watcherId;
+    function getColumnIndex(column) {
+        const columns = {
+            "name": 1,
+            "value": 2,
+            "invested": 3,
+            "Dist_YTD": 4,
+            "Dist_ITD": 5,
+            "roi": 6,
+            "years": 7
+        };
+        return columns[column];
     }
-
 
     function confirmDelete(watcherId) {
         event.stopPropagation();
@@ -141,10 +195,8 @@
         const deleteModal = document.getElementById('deleteModal');
         const deleteForm = document.getElementById('deleteForm');
 
-        // Set the action URL for the delete form
         deleteForm.action = `/watchers/delete/${watcherId}/`;
 
-        // Show the modal
         deleteModal.style.display = 'block';
     }
 

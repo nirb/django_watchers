@@ -133,22 +133,32 @@ class WatchersFin:
             return watcher_qs[0]
         return None
 
-    def get_watchers_sum_per_month(self, user_id, currency, events_type):
+    def get_watchers_sum_currency_per_month(self, user_id, currency, events_type):
         watchers = self.get_watchers(user_id).filter(currency=currency)
+        return self.get_watchers_sum_per_month(watchers, currency, events_type)
+
+    def get_watcher_sum_per_month(self, user_id, watcher_name, events_type):
+        watchers = self.get_watchers(user_id).filter(name=watcher_name)
+        return self.get_watchers_sum_per_month(watchers, watchers[0].currency, events_type)
+
+    def get_watchers_sum_per_month(self, watchers, currency, events_type):
         total_sum_per_month = {}
         for watcher in watchers:
             # watchersInfo.update_watcher_data_over_time(watcher)
-            if watcher.name == "Kingdom Fund 15":
-                print("here")
+            # if watcher.name == "Kingdom Fund 15":
+            #    print("here")
             events = watcher.get_events(events_type)[::-1]
-            monethly_values = get_monthly_values(events, currency)
+            carrying_forward = True if events_type == STATEMENT_EVENT_TYPE else False
+            monethly_values = get_monthly_values(
+                events, currency, carrying_forward)
 
-            for item in monethly_values["values"]:
-                for date_str, value in item.items():
-                    if date_str in total_sum_per_month:
-                        total_sum_per_month[date_str] += value
-                    else:
-                        total_sum_per_month[date_str] = value
+            if "values" in monethly_values:
+                for item in monethly_values["values"]:
+                    for date_str, value in item.items():
+                        if date_str in total_sum_per_month:
+                            total_sum_per_month[date_str] += value
+                        else:
+                            total_sum_per_month[date_str] = value
 
             # print("get_watchers_sum_per_month", watcher.name,
             #      json.dumps(monethly_values, indent=2))

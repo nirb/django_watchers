@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
+{% load static %}
+<script src="{% static 'js/watchers_plots.js' %}"></script>
 {% if error %}
 <h3 style="color: red;">{{error}}</h3>
 {% else %}
@@ -17,6 +19,7 @@
     </center>
     <h6>Advisor - {{watcher.advisor.name}}</h6>
     {% include "watchers/watcher_fin_info.html" %}
+    <div id="Statement"></div>
     {% with s=watcher.monthly_statements_data %}
     {% with d=watcher.monthly_distribution_data %}
     {% with w=watcher.monthly_wire_data %}
@@ -26,5 +29,17 @@
     {% endwith %}
     {% include "events/events.html" %}
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log("DOMContentLoaded watcher.html");
+        fetchWatcherPlotsData("{{ watcher.name }}", "Statement", on_done);
+    });
+
+    function on_done(data, event_type) {
+        let title = event_type + " - {{ watcher.name }}";
+        console.log(data);
+        generateCurrencyPlot(data, title, "", "", "Statement");
+    }
+</script>
 {% endif %}
 {% endblock %}

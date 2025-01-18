@@ -5,22 +5,43 @@
 <div class="spinner-border text-primary" role="status">
     <span class="visually-hidden">Loading...</span>
 </div>
-<div class="row m-0 p-0">
-    <div class="col mx-2 p-0" id="USD_plot"></div>
-    <div class="col mx-2 p-0" id="NIS_plot"></div>
-    <div class="col mx-2 px-2" id="EUR_plot"></div>
+<div class="row">
+    <div class="col-sm-12" id="USD_Distribution_full_width"></div>
+    <div class="col-sm-12 mb-3" id="USD_Statement"></div>
+    <div class="col-sm-12 mb-3" id="NIS_Statement"></div>
+    <div class="col-sm-12 mb-3" id="EUR_Statement"></div>
+    <div class="col-sm-12 mb-3" id="USD_Distribution"></div>
+    <div class="col-sm-12 mb-3" id="NIS_Distribution"></div>
+    <div class="col-sm-12 mb-3" id="EUR_Distribution"></div>
 </div>
-
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        fetchWatchersPlotsData("USD", on_done);
-        fetchWatchersPlotsData("NIS", on_done);
-        fetchWatchersPlotsData("EUR", on_done);
+        fetchWatchersPlotsData("USD", "Statement", on_done);
+        fetchWatchersPlotsData("NIS", "Statement", on_done);
+        fetchWatchersPlotsData("EUR", "Statement", on_done);
+        fetchWatchersPlotsData("USD", "Distribution", on_done);
+        fetchWatchersPlotsData("NIS", "Distribution", on_done);
+        fetchWatchersPlotsData("EUR", "Distribution", on_done);
     });
 
-    function on_done(data, currency) {
+    document.getElementById('USD_Distribution').addEventListener('click', function () {
+        fetchWatchersPlotsData("USD", "Distribution", on_done_full_width);
+    });
+
+    function on_done(data, currency, event_type) {
+        let object_id = currency + "_" + event_type;
+        generate_plot(data, event_type, currency, object_id);
+    }
+
+    function on_done_full_width(data, currency, event_type) {
+        let object_id = currency + "_" + event_type + "_full_width";
+        generate_plot(data, event_type, currency, object_id);
+    }
+
+    function generate_plot(data, event_type, currency, object_id) {
         document.querySelector('.spinner-border').style.display = 'none';
-        generateCurrencyPlot(data, currency, "", "", currency + "_plot");
+        let title = event_type + " - " + currency
+        generateCurrencyPlot(data, title, "", "", object_id);
     }
 </script>
