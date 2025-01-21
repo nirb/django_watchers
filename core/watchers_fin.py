@@ -144,9 +144,6 @@ class WatchersFin:
     def get_watchers_sum_per_month(self, watchers, currency, events_type):
         total_sum_per_month = {}
         for watcher in watchers:
-            # watchersInfo.update_watcher_data_over_time(watcher)
-            # if watcher.name == "Kingdom Fund 15":
-            #    print("here")
             events = watcher.get_events(events_type)[::-1]
             carrying_forward = True if events_type == STATEMENT_EVENT_TYPE else False
             monethly_values = get_monthly_values(

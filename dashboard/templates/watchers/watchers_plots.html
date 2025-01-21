@@ -5,15 +5,28 @@
 <div class="spinner-border text-primary" role="status">
     <span class="visually-hidden">Loading...</span>
 </div>
-<div class="row">
-    <div class="col-sm-12" id="USD_Distribution_full_width"></div>
-    <div class="col-sm-12 mb-3" id="USD_Statement"></div>
-    <div class="col-sm-12 mb-3" id="NIS_Statement"></div>
-    <div class="col-sm-12 mb-3" id="EUR_Statement"></div>
-    <div class="col-sm-12 mb-3" id="USD_Distribution"></div>
-    <div class="col-sm-12 mb-3" id="NIS_Distribution"></div>
-    <div class="col-sm-12 mb-3" id="EUR_Distribution"></div>
-</div>
+<center>
+    <div class="row">
+        <div class="col-12 col-sm-4 mb-3">
+            <div id="USD_Statement" style="height: 300px;"></div>
+        </div>
+        <div class="col-12 col-sm-4 mb-3">
+            <div id="NIS_Statement" style="height: 300px;"></div>
+        </div>
+        <div class="col-12 col-sm-4 mb-3">
+            <div id="EUR_Statement" style="height: 300px;"></div>
+        </div>
+        <div class="col-12 col-sm-4 mb-3">
+            <div id="USD_Distribution" style="height: 300px;"></div>
+        </div>
+        <div class="col-12 col-sm-4 mb-3">
+            <div id="NIS_Distribution" style="height: 300px;"></div>
+        </div>
+        <div class="col-12 col-sm-4 mb-3">
+            <div id="EUR_Distribution" style="height: 300px;"></div>
+        </div>
+    </div>
+</center>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -25,9 +38,9 @@
         fetchWatchersPlotsData("EUR", "Distribution", on_done);
     });
 
-    document.getElementById('USD_Distribution').addEventListener('click', function () {
-        fetchWatchersPlotsData("USD", "Distribution", on_done_full_width);
-    });
+    //document.getElementById('USD_Distribution').addEventListener('click', function () {
+    //    fetchWatchersPlotsData("USD", "Distribution", on_done_full_width);
+    //});
 
     function on_done(data, currency, event_type) {
         let object_id = currency + "_" + event_type;
@@ -42,6 +55,13 @@
     function generate_plot(data, event_type, currency, object_id) {
         document.querySelector('.spinner-border').style.display = 'none';
         let title = event_type + " - " + currency
+        console.log("generate_plot", event_type, currency)
+        console.log(data)
+        // leave only the 12 latest elements in the dada array
+        if (event_type == "Statement") {
+            data = data.slice(-12);
+        }
+        console.log(data)
         generateCurrencyPlot(data, title, "", "", object_id);
     }
 </script>
