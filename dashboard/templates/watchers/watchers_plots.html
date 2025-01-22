@@ -6,24 +6,24 @@
     <span class="visually-hidden">Loading...</span>
 </div>
 <center>
-    <div class="row">
-        <div class="col-12 col-sm-4 mb-3">
-            <div id="USD_Statement" style="height: 300px;"></div>
+    <div class="row mt-2">
+        <div class="col-12 col-sm-4">
+            <div class="card mb-3" id="USD_Statement" style="height: 300px;"></div>
         </div>
-        <div class="col-12 col-sm-4 mb-3">
-            <div id="NIS_Statement" style="height: 300px;"></div>
+        <div class="col-12 col-sm-4">
+            <div class="card  container" id="NIS_Statement" style="height: 300px;"></div>
         </div>
-        <div class="col-12 col-sm-4 mb-3">
-            <div id="EUR_Statement" style="height: 300px;"></div>
+        <div class="col-12 col-sm-4">
+            <div class="card container" id="EUR_Statement" style="height: 300px;"></div>
         </div>
-        <div class="col-12 col-sm-4 mb-3">
-            <div id="USD_Distribution" style="height: 300px;"></div>
+        <div class="col-12 col-sm-4">
+            <div class="card" id="USD_Distribution" style="height: 300px;"></div>
         </div>
-        <div class="col-12 col-sm-4 mb-3">
-            <div id="NIS_Distribution" style="height: 300px;"></div>
+        <div class="col-12 col-sm-4">
+            <div class="card" id="NIS_Distribution" style="height: 300px;"></div>
         </div>
-        <div class="col-12 col-sm-4 mb-3">
-            <div id="EUR_Distribution" style="height: 300px;"></div>
+        <div class="col-12 col-sm-4">
+            <div class="card" id="EUR_Distribution" style="height: 300px;"></div>
         </div>
     </div>
 </center>
@@ -60,8 +60,10 @@
         // leave only the 12 latest elements in the dada array
         if (event_type == "Statement") {
             data = data.slice(-12);
+            title = currency + " " + get_profit(data);
         }
         console.log(data)
+
         generateCurrencyPlot(data, title, "", "", object_id);
     }
 </script>

@@ -1,10 +1,12 @@
 .card {
     background-color: #fff;
-    border-radius: 10px;
+    border-radius: 8px;
     border: none;
     position: relative;
+    overflow: hidden;
     box-shadow: 0 0.46875rem 2.1875rem rgba(90, 97, 105, 0.1), 0 0.9375rem 1.40625rem rgba(90, 97, 105, 0.1), 0 0.25rem 0.53125rem rgba(90, 97, 105, 0.12), 0 0.125rem 0.1875rem rgba(90, 97, 105, 0.1);
 }
+
 
 .statement-color {
     background: linear-gradient(to right, #4caf50, #8bc34a) !important;

@@ -19,7 +19,7 @@
     </center>
     <h6>Advisor - {{watcher.advisor.name}}</h6>
     {% include "watchers/watcher_fin_info.html" %}
-    <div id="Statement"></div>
+    <div class="card" id="Statement" style="min-height: 300px;"></div>
     {% with s=watcher.monthly_statements_data %}
     {% with d=watcher.monthly_distribution_data %}
     {% with w=watcher.monthly_wire_data %}
@@ -36,9 +36,9 @@
     });
 
     function on_done(data, event_type) {
-        let title = event_type + " - {{ watcher.name }}";
+        let title = "{{ watcher.name }} ";
         console.log(data);
-        generateCurrencyPlot(data, title, "", "", "Statement");
+        generateCurrencyPlot(data, title + get_profit(data), "", "", "Statement");
     }
 </script>
 {% endif %}

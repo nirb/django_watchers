@@ -48,17 +48,8 @@ function generateCurrencyPlot(data, title, xaxis_title, yaxis_title, plot_id) {
     var trace = {
         x: dates,
         y: values,
-        type: 'scatter',
-        mode: 'lines+markers',
-        line: {
-            shape: title.includes("Statement") ? "spline" : "line",   // Makes the line curved
-            color: "blue",     // Optional: Customize the color
-            width: 4           // Optional: Set the line width
-        },
-        marker: {
-            size: 6,           // Customize marker size
-            color: "red"       // Customize marker color
-        }
+        mode: 'lines',
+        type: 'scatter'
     };
 
     var layout = {
@@ -67,37 +58,21 @@ function generateCurrencyPlot(data, title, xaxis_title, yaxis_title, plot_id) {
             title: xaxis_title
         },
         yaxis: {
-            title: yaxis_title
+            title: yaxis_title,
+            rangemode: 'tozero'
         },
-        paper_bgcolor: 'rgba(0,0,0,0)',  // Transparent background
-        plot_bgcolor: 'rgba(0,0,0,0)',   // Transparent plot area
-        margin: {
-            l: 50,
-            r: 50,
-            b: 50,
-            t: 50,
-            pad: 4
-        },
-        shapes: [
-            {
-                type: 'path',  // Other options include 'rect 'circle', 'line', 'path'
-                xref: 'paper',
-                yref: 'paper',
-                x0: 0,
-                y0: 0,
-                x1: 1,
-                y1: 1,
-                line: {
-                    width: 2,
-                    color: 'black'
-                }
-            }
-        ]
     };
 
     var config = {
-        responsive: true
+        responsive: false,
+        displayModeBar: false
     };
 
     Plotly.newPlot(plot_id, [trace], layout, config);
+}
+
+function get_profit(data) {
+    let first = data.find(d => d.value !== 0).value;
+    let last = data[data.length - 1].value;
+    return (((last - first) / first) * 100).toFixed(2) + "%";
 }
