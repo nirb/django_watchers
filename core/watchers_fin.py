@@ -137,8 +137,8 @@ class WatchersFin:
         watchers = self.get_watchers(user_id).filter(currency=currency)
         return self.get_watchers_sum_per_month(watchers, currency, events_type)
 
-    def get_watcher_sum_per_month(self, user_id, watcher_name, events_type):
-        watchers = self.get_watchers(user_id).filter(name=watcher_name)
+    def get_watcher_sum_per_month(self, user_id, watcher_id, events_type):
+        watchers = self.get_watchers(user_id).filter(id=watcher_id)
         return self.get_watchers_sum_per_month(watchers, watchers[0].currency, events_type)
 
     def get_watchers_sum_per_month(self, watchers, currency, events_type):

@@ -32,12 +32,14 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         console.log("DOMContentLoaded watcher.html");
-        fetchWatcherPlotsData("{{ watcher.name }}", "Statement", on_done);
+        fetchWatcherPlotsData("{{ watcher.id }}", "Statement", on_done);
     });
 
     function on_done(data, event_type) {
         let title = "{{ watcher.name }} ";
-        console.log(data);
+        console.log("0", data);
+        data = data.slice(-12);
+        console.log("1", data);
         generateCurrencyPlot(data, title + get_profit(data), "", "", "Statement");
     }
 </script>

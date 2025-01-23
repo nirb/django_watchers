@@ -30,9 +30,9 @@ function fetchWatchersPlotsData(currency, events_type, on_done) {
         });
 }
 
-function fetchWatcherPlotsData(watcher_name, events_type, on_done) {
-    console.log("fetchWatcherPlotsData", watcher_name, events_type);
-    fetch(`/watcher_plots_data?watcher=${watcher_name}&events_type=${events_type}`)
+function fetchWatcherPlotsData(watcher_id, events_type, on_done) {
+    console.log("fetchWatcherPlotsData", watcher_id, events_type);
+    fetch(`/watcher_plots_data?watcher_id=${watcher_id}&events_type=${events_type}`)
         .then(response => response.json())
         .then(data => {
             console.log(data);
@@ -74,5 +74,8 @@ function generateCurrencyPlot(data, title, xaxis_title, yaxis_title, plot_id) {
 function get_profit(data) {
     let first = data.find(d => d.value !== 0).value;
     let last = data[data.length - 1].value;
-    return (((last - first) / first) * 100).toFixed(2) + "%";
+    let diff = last - first;
+    console.log(first, last, diff);
+    let profit = ((diff / first) * 100).toFixed(2)
+    return (diff < 0 ? '(' : '') + profit + (diff < 0 ? ')' : '') + "%";
 }

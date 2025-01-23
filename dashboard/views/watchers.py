@@ -214,9 +214,9 @@ def watchers_plots_data(request):
 
 
 def watcher_plots_data(request):
-    watcher = request.GET.get('watcher', None)
+    watcher_id = request.GET.get('watcher_id', None)
     event_type = request.GET.get('events_type', None)
     ret = watchersFin.get_watcher_sum_per_month(
-        request.user.id, watcher, event_type)
+        request.user.id, watcher_id, event_type)
 
     return JsonResponse(ret, safe=False)
