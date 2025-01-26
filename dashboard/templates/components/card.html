@@ -10,11 +10,11 @@
         <div class="container p-0 m-2" style="cursor: pointer;"
             onclick="window.location.href='/watchers/{{ card.title }}'">
             {% for item in card.items %}
-            <div class=" row">
+            <div class="row">
                 <div class="col-6 text-left">
                     <div class="item-component">{{ item.text_left }}</div>
                 </div>
-                <div class="col-6 text-right">
+                <div class="col-6 text-center">
                     <div class="item-component">{{ item.text_right }}</div>
                 </div>
             </div>

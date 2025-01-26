@@ -30,6 +30,28 @@ def dashboard_view(request):
 
 
 @login_required
+def report(request):
+    clear_cache_if_needed()
+    if request.method == "GET":
+        watchersFin.calculate_summary(request.user.id)
+        currrencies_sum = []
+        for currency in CURRENCY_TYPES:
+            currrencies_sum.append(
+                [currency, watchersFin.sum_pef_currency[currency]])
+        assets_in_currencies = []
+        for currency in CURRENCY_TYPES:
+            assets_in_currencies.append(
+                [currency, watchersFin.currency_values[currency], watchersFin.currency_distribution[currency]])
+
+        context = {"summary_card": get_watchers_summary_card(),
+                   "currency_cards": get_currency_cards(),
+                   "currrencies_sum": currrencies_sum,
+                   "assets_in_currencies": assets_in_currencies}
+
+        return render(request, 'reports/report_.html', context)
+
+
+@login_required
 def watchers_view(request):
     # show watchers table with currency tabs
     clear_cache_if_needed()

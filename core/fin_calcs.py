@@ -92,7 +92,7 @@ def calculate_investment_info(events):
         100 if total_invested > 0 else 0
 
     # Calculate YTD Net Gain or Loss
-    print_debug(
+    print(
         f"{ytd_end_value=} {ytd_start_value=} {ytd_distributed=} {ytd_invested=}")
     ytd_net_gain_or_loss = ytd_end_value - ytd_invested + \
         ytd_distributed - ytd_start_value

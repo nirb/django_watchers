@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+<div>
+    <div>
+        <button class="btn btn-primary" onclick="printView();">Print</button>
+    </div>
+    <div id="view_to_print">
+        {{ view|safe }}
+    </div>
+</div>
+<script>
+    function printView() {
+        var printContents = document.getElementById('view_to_print').innerHTML;
+        var originalContents = document.body.innerHTML;
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+    }
+</script>
+{% endblock %}

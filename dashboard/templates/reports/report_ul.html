@@ -1,0 +1,16 @@
+<div>
+    <h5>{{ title }}</h5>
+    <ul class="list-group">
+        {% for row in list %}
+        <li class="list-group-item">
+            <div class="row">
+                {% for item in row %}
+                <div class="col">
+                    <h4>{{ item }}</h4>
+                </div>
+                {% endfor %}
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>

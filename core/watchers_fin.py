@@ -16,8 +16,9 @@ class WatchersFin:
             cls._instance = super(WatchersFin, cls).__new__(cls)
         return cls._instance
 
-    def __init__(self):
-        self.clear()
+    def __init__(self, skip_init=False):
+        if not skip_init:
+            self.clear()
 
     def clear(self):
         self.watchers = None
@@ -76,7 +77,12 @@ class WatchersFin:
         # set watcher fin_info, calculate the total values for all watchers
         for watcher in self.watchers:
             if watcher.type in INVESTMENT_WATCHER_TYPES:
+                print("calculate_currency_sum", watcher.name)
                 fin_info = calculate_investment_info(watcher.get_events())
+                fin_info[UNFUNDED_CURRENCY] = int_to_str(
+                    fin_info[UNFUNDED], watcher.currency)
+                fin_info[COMMITMENT_CURRENCY] = int_to_str(
+                    fin_info[COMMITMENT], watcher.currency)
                 self.fin_info[f"{watcher.id}"] = fin_info
                 # print("calculate_currency_sum",watcher.name,fin_info)
                 if fin_info:

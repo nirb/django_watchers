@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_filters %}
+{% block content %}
+<div class="container px-0 pt-4">
+    <div class="row row-cols-sm-1 row-cols-lg-2 gx-8">
+        <div class="col mb-4">
+            <div class="p-2 border border-primary border-4 rounded bg-light">
+                {% with title="Total assets in each currency" list=assets_in_currencies %}
+                {% include "reports/report_ul.html" %}
+                {% endwith %}
+            </div>
+        </div>
+        <div class="col mb-4">
+            <div class="p-2 border border-primary border-4 rounded bg-light">
+                {% with title="Total sum of assets converted in each currency" list=currrencies_sum %}
+                {% include "reports/report_ul.html" %}
+                {% endwith %}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    let x =
+        console.log('assets_in_currencies', "{{ assets_in_currencies }}");
+</script>
+{% endblock %}

@@ -10,12 +10,12 @@ def menu_view(request):
                 "url": "/events_cards/-date", "items": []},
             {"title": "Show Pending Events",
              "url": "/events_cards/date?type=notice", "items": []},
-            {"title": "Read", "url": "/", "items": []},
-            {"title": "Update", "url": "/", "items": []},
-            {"title": "Delete", "url": "/", "items": []},
-            {"title": "Export", "url": "/", "items": []},
-            {"title": "Import", "url": "/", "items": []},
-            {"title": "Print", "url": "/", "items": []},
+            {"title": "Monthly Report", "url": "/monthly_report",
+                "items": []},
+            {"title": "TBD", "url": "/", "items": []},
         ]
     }
+    for menu in context["menues"]:
+        menu["background"] = "primary"
+
     return render(request, 'menues/cards_menu.html', context)

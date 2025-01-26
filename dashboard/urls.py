@@ -7,7 +7,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from .views.events import *
 from .views.watchers import *
 from .views.menu import *
-
+from .views.reports import *
 from .views.ai import ai_view
 
 import os
@@ -81,6 +81,8 @@ urlpatterns = [
          edit_event, name='delete_event'),
     path('events_cards/<str:order_by>', events_cards, name='events_cards'),
 
+    # reports
+    path('monthly_report/', report, name='monthly_report'),
 
     # actions
     path('menues/', menu_view, name='actions'),

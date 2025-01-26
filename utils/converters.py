@@ -46,7 +46,7 @@ def int_to_str(value, currency=None):
         try:
             value = float(value)
         except ValueError:
-            return value
+            return value[:-2] if value.endswith('.0') else value
     show_currency = ""
     if currency:
         show_currency = currency_to_symbol_or_type(currency)
@@ -58,8 +58,8 @@ def int_to_str(value, currency=None):
         if value % 1 == 0:
             return f"{show_currency}{int(value):,}{k_sign}"
         else:
-            return f"{show_currency}{value:,.1f}{k_sign}"
-    return f"({show_currency}{(-1*value):,.1f}{k_sign})"
+            return f"{show_currency}{value:,.0f}{k_sign}" if value % 1 == 0 else f"{show_currency}{value:,.1f}{k_sign}"
+    return f"({show_currency}{(-1*value):,.0f}{k_sign})" if value % 1 == 0 else f"({show_currency}{(-1*value):,.1f}{k_sign})"
 
 
 def json_keys_to_string_values(input_obj, keys, currency=None):
