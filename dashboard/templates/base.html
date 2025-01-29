@@ -42,6 +42,12 @@
             background-color: var(--primary-main-color);
         }
     </style>
+    <script>
+        function handleSearchClick(event) {
+            event.preventDefault();
+            // Add any additional logic here if needed
+        }
+    </script>
     <title>{% block title %}Watchers AI{% endblock %}</title>
 </head>
 
@@ -59,7 +65,7 @@
                 </a>
                 {% endif %}
                 <div class="search-box">
-                    <button class="btn-search"><i class="fas fa-search"></i></button>
+                    <button class="btn-search" onclick="handleSearchClick(event)"><i class="fas fa-search"></i></button>
                     <input type="text" class="input-search" placeholder="Type to Search...">
                 </div>
             </div>
