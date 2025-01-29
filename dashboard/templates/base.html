@@ -56,19 +56,11 @@
                 <div class="search-box me-2">
                     <button class="btn-search bg-transparent border-0 pt-2"><i class="fas fa-search"></i></button>
                     <input type="text" list="watchersListOptions" class="input-search" placeholder="Type to Search..."
-                        onkeypress="if(event.key === 'Enter') { searchResults(this.value); event.preventDefault(); }"
-                        oninput="if(this.value === '') {     
-                                const searchResults = document.getElementById('searchResults');
-                                searchResults.innerHTML = ''; 
+                        oninput="if(true) {     
+                                searchResults(this.value);
                                 event.preventDefault();
-                                window.location.reload();}">
-                    <datalist id="watchersListOptions">
-                        <option value="San Francisco">
-                        <option value="New York">
-                        <option value="Seattle">
-                        <option value="Los Angeles">
-                        <option value="Chicago">
-                    </datalist>
+                        }">
+                    <datalist id="watchersListOptions" />
                 </div>
                 <div class="dropdown dropstart">
                     <a class="btn btn-primary" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
