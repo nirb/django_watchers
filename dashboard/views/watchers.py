@@ -180,10 +180,11 @@ def search_watchers(request, search_string=""):
     if request.method == 'GET':
         ret = []
         print("search_watchers", search_string)
+
         if len(search_string) > 0:
             watchers = watchersFin.get_watchers(request.user.id).order_by(NAME)
             for w in watchers:
-                if search_string.lower() in w.name.lower() or search_string.lower() in w.currency.lower() or search_string.lower() in w.advisor.name.lower():
+                if search_string == "__all__!" or search_string.lower() in w.name.lower() or search_string.lower() in w.currency.lower() or search_string.lower() in w.advisor.name.lower():
                     watcherInfo = watchersFin.get_watcher_info(w.id)
                     ret.append({"name": w.name, "id": w.id,
                                "currency": w.currency,

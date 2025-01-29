@@ -47,37 +47,38 @@
 
 <body style="background-color: lightgray;">
     {% if user.is_authenticated %}
-
-    <nav class="navbar bg-body-tertiary sticky-top">
-        <div class="d-flex justify-content-between">
-            <div class="p-2">First item</div>
-            <div class="p-2 ms-auto">Second item</div>
-            <div class="p-2">Third item</div>
+    <nav class="navbar bg-body-tertiary sticky-top pb-2">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fa-regular fa-eye app_main_color"></i>
+            </a>
+            <div class="d-flex">
+                <div class="search-box me-2">
+                    <button class="btn-search bg-transparent border-0 pt-2"><i class="fas fa-search"></i></button>
+                    <input type="text" list="watchersListOptions" class="input-search" placeholder="Type to Search..."
+                        onkeypress="if(event.key === 'Enter') { searchResults(this.value); event.preventDefault(); }"
+                        oninput="if(this.value === '') {     
+                                const searchResults = document.getElementById('searchResults');
+                                searchResults.innerHTML = ''; 
+                                event.preventDefault();
+                                window.location.reload();}">
+                    <datalist id="watchersListOptions">
+                        <option value="San Francisco">
+                        <option value="New York">
+                        <option value="Seattle">
+                        <option value="Los Angeles">
+                        <option value="Chicago">
+                    </datalist>
+                </div>
+                <div class="dropdown dropstart">
+                    <a class="btn btn-primary" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="navbar-toggler-icon"></span>
+                    </a>
+                    {% include 'menues/dropdown_menu.html' %}
+                </div>
+            </div>
         </div>
     </nav>
-    <!-- <div class="hstack gap-3">
-            <div class="p-2">
-                <a class="navbar-brand" href="/">
-                    <i class="fa-regular fa-eye app_main_color"></i>
-                </a>
-            </div>
-            <div class="search-box">
-                <button class="btn-search"><i class="fas fa-search"></i></button>
-                <input type="text" class="input-search" placeholder="Type to Search..."
-                    onkeypress="if(event.key === 'Enter') { searchResults(this.value); event.preventDefault(); }"
-                    oninput="if(this.value === '') {     
-                            const searchResults = document.getElementById('searchResults');
-                            searchResults.innerHTML = ''; 
-                            event.preventDefault();
-                            window.location.reload();}">
-            </div>
-            <div class="dropdown dropstart">
-                <a class="btn btn-primary" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <span class="navbar-toggler-icon"></span>
-                </a>
-                {% include 'menues/dropdown_menu.html' %}
-            </div>
-        </div> -->
     <!-- Main Content -->
     <main>
         {% if messages %}
@@ -114,6 +115,10 @@
 
     {% endif %}
 </body>
-
+<script>
+    window.onload = function () {
+        get_watchers();
+    };
+</script>
 
 </html>
