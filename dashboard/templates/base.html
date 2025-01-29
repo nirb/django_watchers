@@ -13,6 +13,7 @@
 
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="stylesheet" href="{% static 'css/tables.css' %}">
+    <link rel="stylesheet" href="{% static 'css/search.css' %}">
 
     <link rel="icon" type="image/x-icon" href="{% static 'watcher/icons/favicon.png' %}">
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'app_name/icons/ios-180x180.png' %}">
@@ -57,6 +58,10 @@
                     Menu
                 </a>
                 {% endif %}
+                <div class="search-box">
+                    <button class="btn-search"><i class="fas fa-search"></i></button>
+                    <input type="text" class="input-search" placeholder="Type to Search...">
+                </div>
             </div>
             <!-- Toggler Button -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
