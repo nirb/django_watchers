@@ -47,66 +47,37 @@
 
 <body style="background-color: lightgray;">
     {% if user.is_authenticated %}
-    <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
-        <div class="container-fluid">
-            <div class="hstack gap-3">
+
+    <nav class="navbar bg-body-tertiary sticky-top">
+        <div class="hstack gap-3">
+            <div class="p-2">First item</div>
+            <div class="p-2 ms-auto">Second item</div>
+            <div class="p-2">Third item</div>
+        </div>
+    </nav>
+    <!-- <div class="hstack gap-3">
+            <div class="p-2">
                 <a class="navbar-brand" href="/">
                     <i class="fa-regular fa-eye app_main_color"></i>
                 </a>
-                {% if request.path != '/menues/' %}
-                <a href="/menues" class="nav-item">
-                    Menu
+            </div>
+            <div class="search-box">
+                <button class="btn-search"><i class="fas fa-search"></i></button>
+                <input type="text" class="input-search" placeholder="Type to Search..."
+                    onkeypress="if(event.key === 'Enter') { searchResults(this.value); event.preventDefault(); }"
+                    oninput="if(this.value === '') {     
+                            const searchResults = document.getElementById('searchResults');
+                            searchResults.innerHTML = ''; 
+                            event.preventDefault();
+                            window.location.reload();}">
+            </div>
+            <div class="dropdown dropstart">
+                <a class="btn btn-primary" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="navbar-toggler-icon"></span>
                 </a>
-                {% endif %}
-                <div class="search-box">
-                    <button class="btn-search"><i class="fas fa-search"></i></button>
-                    <input type="text" class="input-search" placeholder="Type to Search..."
-                        onkeypress="if(event.key === 'Enter') { searchResults(this.value); event.preventDefault(); }"
-                        oninput="if(this.value === '') {     
-                            const searchResults = document.getElementById('searchResults');
-                            searchResults.innerHTML = ''; 
-                            event.preventDefault();
-                            window.location.reload();}">
-                </div>
+                {% include 'menues/dropdown_menu.html' %}
             </div>
-            <!-- Toggler Button -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <!-- Collapsible Content -->
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <!-- Navbar Items with margin between them -->
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-flex"></ul>
-                <!-- Search Form -->
-                <!-- <form class="d-flex" role="search">
-                    <input class="form-control form-control-sm d-lg-block p-0" id="searchBox" type="search"
-                        placeholder="Search" aria-label="Search"
-                        onkeypress="if(event.key === 'Enter') { searchResults(this.value); event.preventDefault(); }"
-                        oninput="if(this.value === '') {     
-                            const searchResults = document.getElementById('searchResults');
-                            searchResults.innerHTML = ''; 
-                            event.preventDefault();
-                            window.location.reload();}">
-                </form> -->
-                <div class="nav-item me-2"> <!-- Added margin-end -->
-                    <a class="nav-link dropdown-toggle d-lg-none" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        More
-                    </a>
-                    {% include 'menues/dropdown_menu.html' %}
-                    <div class="btn-group dropstart d-none d-lg-block">
-                        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
-                            aria-expanded="false" style="background-color: white;">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        {% include 'menues/dropdown_menu.html' %}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
+        </div> -->
     <!-- Main Content -->
     <main>
         {% if messages %}
