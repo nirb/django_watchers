@@ -56,3 +56,5 @@ poetry.lock
 # Other
 *.bak
 
+.aider*
+.env

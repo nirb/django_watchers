@@ -42,12 +42,6 @@
             background-color: var(--primary-main-color);
         }
     </style>
-    <script>
-        function handleSearchClick(event) {
-            event.preventDefault();
-            // Add any additional logic here if needed
-        }
-    </script>
     <title>{% block title %}Watchers AI{% endblock %}</title>
 </head>
 
@@ -65,8 +59,14 @@
                 </a>
                 {% endif %}
                 <div class="search-box">
-                    <button class="btn-search" onclick="handleSearchClick(event)"><i class="fas fa-search"></i></button>
-                    <input type="text" class="input-search" placeholder="Type to Search...">
+                    <button class="btn-search"><i class="fas fa-search"></i></button>
+                    <input type="text" class="input-search" placeholder="Type to Search..."
+                        onkeypress="if(event.key === 'Enter') { searchResults(this.value); event.preventDefault(); }"
+                        oninput="if(this.value === '') {     
+                            const searchResults = document.getElementById('searchResults');
+                            searchResults.innerHTML = ''; 
+                            event.preventDefault();
+                            window.location.reload();}">
                 </div>
             </div>
             <!-- Toggler Button -->
@@ -80,7 +80,7 @@
                 <!-- Navbar Items with margin between them -->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-flex"></ul>
                 <!-- Search Form -->
-                <form class="d-flex" role="search">
+                <!-- <form class="d-flex" role="search">
                     <input class="form-control form-control-sm d-lg-block p-0" id="searchBox" type="search"
                         placeholder="Search" aria-label="Search"
                         onkeypress="if(event.key === 'Enter') { searchResults(this.value); event.preventDefault(); }"
@@ -89,7 +89,7 @@
                             searchResults.innerHTML = ''; 
                             event.preventDefault();
                             window.location.reload();}">
-                </form>
+                </form> -->
                 <div class="nav-item me-2"> <!-- Added margin-end -->
                     <a class="nav-link dropdown-toggle d-lg-none" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">

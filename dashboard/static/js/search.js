@@ -1,6 +1,9 @@
 function searchResults(searchStr) {
     const searchResults = document.getElementById('searchResults');
 
+    // first put the spinner
+    searchResults.innerHTML = '<div class="spinner-border text-primary text-center" role="status"><span class="visually-hidden">Loading...</span></div>'
+
     console.log('Search string:', searchStr);
     if (searchStr.length > 0) {
         fetch(`/search_watchers/${searchStr}`)
@@ -18,9 +21,11 @@ function searchResults(searchStr) {
                     content += '</ul>';
                     searchResults.innerHTML = content;
                 } else {
-                    searchResults.innerHTML = '<p class="text-center">No watchers found.</p>';
+                    searchResults.innerHTML = '<h3 class="text-center">No watchers found.</h3>';
                 }
             })
             .catch(error => console.error('Error:', error));
     }
+    console.log('Search string end');
+
 }

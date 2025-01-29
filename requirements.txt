@@ -8,5 +8,3 @@ numpy-financial
 PyMySQL
 gunicorn
 python-dotenv
-xhtml2pdf
-weasyprint
