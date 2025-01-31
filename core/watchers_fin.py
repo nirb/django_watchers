@@ -10,28 +10,30 @@ from utils.debug import d_print, debug_func
 
 class WatchersFin:
     _instance = None  # Class-level attribute to store the single instance
+    _clear_once = True
 
     def __new__(cls, *args, **kwargs):
         if not cls._instance:
             cls._instance = super(WatchersFin, cls).__new__(cls)
         return cls._instance
 
-    def __init__(self, skip_init=False):
-        if not skip_init:
+    def __init__(self):
+        if self._clear_once:
             self.clear()
+            self._clear_once = False
 
     def clear(self):
         self.watchers = None
         # sum of values per currency
         self.currency_sum = {}
         # distribution in % per currency
-        self.currency_distribution = {}
+        self.currency_distribution = {c: 0 for c in CURRENCY_TYPES}
         # unfunded values per currency
-        self.currency_unfunded = {}
+        self.currency_unfunded = {c: 0 for c in CURRENCY_TYPES}
         # values per currency
-        self.currency_values = {}
+        self.currency_values = {c: 0 for c in CURRENCY_TYPES}
         # currency sum per currency
-        self.sum_pef_currency = {}
+        self.sum_pef_currency = {c: 0 for c in CURRENCY_TYPES}
         self.fin_info = {}
         for currency in CURRENCY_TYPES:
             self.currency_sum[currency] = {
@@ -47,30 +49,28 @@ class WatchersFin:
 
         self.calculate_currency_sum()
         self.convert_sum_values_to_str()
-        sum_usd, sum_nis, sum_eur = self.calculate_sum_pef_currency()
+        total_assets_in_currencies = self.calculate_total_assets_in_currencies()
 
         # calculete the currency distribution (convert all to USD)
-        value_usd = self.currency_sum["USD"][VALUE_NUM]
-        value_nis_in_usd = currency_conversion(
-            self.currency_sum["NIS"][VALUE_NUM], "NIS", "USD")
-        value_eur_in_usd = currency_conversion(
-            self.currency_sum["EUR"][VALUE_NUM], "EUR", "USD")
+        assets_in_usd = {
+            c: currency_conversion(
+                self.currency_sum[c][VALUE_NUM], c, "USD") for c in CURRENCY_TYPES
+        }
 
         # set the current values for each currency
         for currency in CURRENCY_TYPES:
             self.currency_values[currency] = self.currency_sum[currency][VALUE]
 
-        self.sum_pef_currency = {"USD": int_to_str(sum_usd, "USD"),
-                                 "NIS": int_to_str(sum_nis, "NIS"),
-                                 "EUR": int_to_str(sum_eur, "EUR")}
+        self.sum_pef_currency = {c: int_to_str(
+            total_assets_in_currencies[c], c) for c in CURRENCY_TYPES}
 
-        self.currency_unfunded = {"USD": self.currency_sum["USD"][UNFUNDED],
-                                  "NIS": self.currency_sum["NIS"][UNFUNDED],
-                                  "EUR": self.currency_sum["EUR"][UNFUNDED]}
+        self.currency_unfunded = {
+            c: self.currency_sum[c][UNFUNDED] for c in CURRENCY_TYPES
+        }
 
-        self.currency_distribution = {"USD": f"{(value_usd/sum_usd) * 100:.2f}%",
-                                      "NIS": f"{(value_nis_in_usd/sum_usd) * 100:.2f}%",
-                                      "EUR": f"{(value_eur_in_usd/sum_usd) * 100:.2f}%"}
+        if total_assets_in_currencies["USD"] > 0:
+            self.currency_distribution = {
+                c: f"{(assets_in_usd[c]/total_assets_in_currencies['USD']) * 100:.2f}%" for c in CURRENCY_TYPES}
 
     @debug_func
     def calculate_currency_sum(self):
@@ -107,17 +107,15 @@ class WatchersFin:
                 self.currency_sum[currency][UNFUNDED_NUM], currency)
 
     @ debug_func
-    def calculate_sum_pef_currency(self):
+    def calculate_total_assets_in_currencies(self):
         # set the current values for each currency
-        sum_usd = 0
-        sum_nis = 0
-        sum_eur = 0
+        total_assets_in_currencies = {c: 0 for c in CURRENCY_TYPES}
         for currency in CURRENCY_TYPES:
             value = self.currency_sum[currency][VALUE_NUM]
-            sum_usd += currency_conversion(value, currency, "USD")
-            sum_nis += currency_conversion(value, currency, "NIS")
-            sum_eur += currency_conversion(value, currency, "EUR")
-        return sum_usd, sum_nis, sum_eur
+            for c in CURRENCY_TYPES:
+                total_assets_in_currencies[c] += currency_conversion(
+                    value, currency, c)
+        return total_assets_in_currencies
 
     def get_watcher_info(self, watcher_id):
         return self.fin_info.get(f"{watcher_id}", None)

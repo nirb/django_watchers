@@ -13,16 +13,15 @@ function searchResults(searchStr) {
         }, 4000);
     } else {
         clearTimeout(reloadTimer);
-        let content = '<h3 class="app_main_color">Search Results</h3><ul class="list-group">';
+        let content = '<h3 class="app_main_color">Search Results</h3>';
         watchers.forEach(watcher => {
             if (watcher.name.toLowerCase().includes(searchStr.toLowerCase()) ||
                 watcher.currency.toLowerCase().includes(searchStr.toLowerCase()) ||
                 watcher.advisor.toLowerCase().includes(searchStr.toLowerCase())) {
                 content += `
-                    <li class="list-group-item p-2"><a href="/watcher/${watcher.id}" style="font-size: small;">${watcher.name}</a></li>`;
+                    <div class="w-50 bg-info m-2 p-2 rounded"><a href="/watcher/${watcher.id}">${watcher.name}</a></div>`;
             }
         });
-        content += '</ul>';
         searchResults.innerHTML = content;
         console.log(content)
     }

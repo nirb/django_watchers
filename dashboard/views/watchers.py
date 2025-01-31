@@ -10,7 +10,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from dashboard.forms.watcher_form import WatcherForm2
 from core.fin_calcs import get_missing_events
-from utils.converters import currency_to_color, currency_to_name, int_to_str, json_keys_to_string_values, list_keys_to_string_values
+from utils.converters import currency_to_color, currency_to_name, event_type_to_color, int_to_str, json_keys_to_string_values, list_keys_to_string_values
 import json
 from django.db.models import Q  # Import Q for OR queries
 
@@ -85,9 +85,14 @@ def watcher_view(request, watcher_id):
                 watcher_info, [VALUE, INVESTED, NET_GAIN, COMMITMENT, UNFUNDED, DIST_ITD, DIST_YTD], watcher.currency)
             watcher_info[EVENTS] = list_keys_to_string_values(
                 watcher_info[EVENTS], [VALUE], watcher.currency)
+            event_cards = [{"type": event.type, "url": f"/events/edit/{event.id}",
+                            "background": event_type_to_color(event.type),
+                            "items": [event.date,  int_to_str(event.value, event.parent.currency)]}
+                           for event in watcher_info[EVENTS]]
             context = {"name": watcher.name,
                        "watcher_info": watcher_info,
                        "watcher": watcher,
+                       "event_cards": event_cards,
                        "missing_events": get_missing_events(watcher.type, watcher_info[EVENTS])}
             watchersInfo.update_watcher_data_over_time(watcher)
             # print("watcher_view", json.dumps(context, indent=2))

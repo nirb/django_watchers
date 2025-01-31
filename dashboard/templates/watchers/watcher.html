@@ -7,27 +7,44 @@
 {% else %}
 <div>
     <center>
-        <h3 class="app_main_color" style="display: inline; font-style: italic;">
+        <h3 class="app-text-color" style="display: inline; font-style: italic;">
             {{name}}
         </h3>
-        <h3 class="app_main_color" style="display: inline; padding-left: 8pk; padding-right: 8px;">
+        <h3 class="app-text-color" style="display: inline; padding-left: 8px; padding-right: 8px;">
             -
         </h3>
-        <h3 class="app_main_color" style="display: inline; font-weight: bold;">
+        <h3 class="app-text-color" style="display: inline; font-weight: bold;">
             {{watcher_info.value}}
         </h3>
     </center>
-    <h6>Advisor - {{watcher.advisor.name}}</h6>
-    {% include "watchers/watcher_fin_info.html" %}
-    <div class="card" id="Statement" style="min-height: 300px;"></div>
-    {% with s=watcher.monthly_statements_data %}
-    {% with d=watcher.monthly_distribution_data %}
-    {% with w=watcher.monthly_wire_data %}
-    {% include "tables/monthly_tabs.html" with statements=s distributions=d wire=w %}
-    {% endwith %}
-    {% endwith %}
-    {% endwith %}
-    {% include "events/events.html" %}
+    <div class="hstack">
+        <div>
+            <a href="/create_event_form/{{name}}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add Event
+            </a>
+        </div>
+        <div class="ms-auto app-text-color">
+            <h6>Advisor - {{watcher.advisor.name}}</h6>
+        </div>
+    </div>
+    <div class="app-card">
+        {% include "watchers/watcher_fin_info.html" %}
+    </div>
+    <div class="app-card">
+        <div id="Statement" style="min-height: 300px;"></div>
+    </div>
+    <div class="app-card">
+        {% with s=watcher.monthly_statements_data %}
+        {% with d=watcher.monthly_distribution_data %}
+        {% with w=watcher.monthly_wire_data %}
+        {% include "tables/monthly_tabs.html" with statements=s distributions=d wire=w %}
+        {% endwith %}
+        {% endwith %}
+        {% endwith %}
+    </div>
+    <div class="app-card">
+        {% include "events/events.html" %}
+    </div>
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {

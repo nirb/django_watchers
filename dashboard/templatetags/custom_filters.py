@@ -24,6 +24,12 @@ def month_name(month_number):
 
 
 @register.filter
+def split(value, delimiter=","):
+    """Splits a string into a list using the given delimiter."""
+    return value.split(delimiter)
+
+
+@register.filter
 def format_value(value):
     try:
         value = int(value) if float(value).is_integer() else value

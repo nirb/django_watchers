@@ -143,8 +143,9 @@ def create_event(request):
                         request, f"Duplicate event with value:{eventForm.value} already exist")
                 else:
                     eventForm.save()  # Save the event to the database
-                    messages.success(
-                        request, f"Event '{eventForm.type}' value:{event_data['Value']} added successfully!")
+                    msg = f"Event '{eventForm.type}' value:{event_data['Value']} added successfully!"
+                    print("adding", msg)
+                    messages.success(request, msg)
                     clear_cache_if_needed()
                 watchersInfo.reset()
                 return redirect('/ai/')
@@ -158,7 +159,8 @@ def create_event_form(request, watcher_name=None):
         form = EventForm2(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, "Event created successfully!")
+            msg = f"Event '{form.cleaned_data['type']}' added successfully!"
+            messages.success(request, msg)
             watchersInfo.reset()
             if watcher_name:
                 watcher = watchersFin.get_watcher(

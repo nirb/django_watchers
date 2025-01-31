@@ -34,10 +34,6 @@
             color: white;
         }
 
-        .app_main_color {
-            color: var(--primary-main-color);
-        }
-
         .app_bg_color {
             background-color: var(--primary-main-color);
         }
@@ -45,16 +41,19 @@
     <title>{% block title %}Watchers AI{% endblock %}</title>
 </head>
 
-<body style="background-color: lightgray;">
+<body>
     {% if user.is_authenticated %}
-    <nav class="navbar bg-body-tertiary sticky-top pb-2">
+    <nav class="navbar bg-primary border-bottom sticky-top pb-2">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/">
-                <i class="fa-regular fa-eye app_main_color"></i>
+            <a class="navbar-brand" style="color: var(--primary-light-color);" href="/">
+                <i class="fa-regular fa-eye"></i>
             </a>
             <div class="d-flex">
                 <div class="search-box me-2">
-                    <button class="btn-search bg-transparent border-0 pt-2"><i class="fas fa-search"></i></button>
+                    <button class="btn-search border-0 p-2"
+                        style="background-color: transparent; color: var(--primary-light-color);">
+                        <i class="fas fa-search"></i>
+                    </button>
                     <input type="text" list="watchersListOptions" class="input-search" placeholder="Type to Search..."
                         oninput="if(true) {     
                                 searchResults(this.value);
@@ -72,7 +71,7 @@
         </div>
     </nav>
     <!-- Main Content -->
-    <main>
+    <main class="bg-primary" style="min-height: 100vh;">
         {% if messages %}
         {% for message in messages %}
         <div class="alert alert-info alert-dismissible fade show" role="alert">
@@ -85,10 +84,6 @@
                     $('.alert').alert('close');
                 }, 10000); // 10 seconds
             </script>
-            {{ message }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
         </div>
         {% endfor %}
         {% endif %}

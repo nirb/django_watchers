@@ -10,3 +10,15 @@ u - bejerano
 
 deployment:
 ./scripts/build_and_deploy.sh
+
+
+# TODO 
+# on the watcher page - show pending on top
+# show distribution and wires in a list and not in calendare view
+# in qurters graph , calculate according to quertest end
+# calculte profit by reducing wire and adding dist
+# add todo watcher
+
+# done 
+# messages are showin twice....
+# move add event to the top

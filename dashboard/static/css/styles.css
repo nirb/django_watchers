@@ -1,4 +1,18 @@
 :root {
+    --primary-light-color: #9cb5ff;
+    --primary-main-color: #191970;
+    --primary-dark-color: #12214e;
+    --primary-text-color: #cddaff;
+
+    --secondary-light-color: #ff7961;
+    --secondary-main-color: #f44336;
+    --secondary-dark-color: #ba000d;
+    --secondary-text-color: #000;
+
+
+}
+
+:root_old {
     --primary-light-color: #757ce8;
     --primary-main-color: #246bdf;
     --primary-dark-color: #002884;
@@ -14,12 +28,30 @@
 /* body {
     background-color: #212529;
     color: #fff;
-}
+}*/
 
 .bg-primary {
-    background-color: black !important;
+    background-color: var(--primary-dark-color) !important;
 }
 
+.app-text-color {
+    color: var(--primary-text-color);
+}
+
+.app-card {
+    background-color: white;
+    padding: 0.5rem;
+    margin-top: 16px;
+    border-radius: 1rem;
+}
+
+.app-data-item {
+    background-color: lightgray;
+    border-radius: 1rem;
+    text-align: center;
+}
+
+/*
 .bg-light {
     background-color: #343a40 !important;
 }

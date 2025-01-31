@@ -8,37 +8,37 @@
 }
 
 
-.statement-color {
+.bg-statement-color {
     background: linear-gradient(to right, #4caf50, #8bc34a) !important;
     /* Green shades */
     color: #fff;
 }
 
-.distribution-color {
+.bg-distribution-color {
     background: linear-gradient(to right, #2196f3, #64b5f6) !important;
     /* Blue shades */
     color: #fff;
 }
 
-.distribution-notice-color {
+.bg-distribution-notice-color {
     background: linear-gradient(to right, #ff9800, #ffc107) !important;
     /* Orange shades */
     color: #000;
 }
 
-.capital-call-color {
+.bg-capital-call-color {
     background: linear-gradient(to right, #ff5722, #ff8a65) !important;
     /* Reddish-orange shades */
     color: #fff;
 }
 
-.wire-receipt-color {
+.bg-wire-receipt-color {
     background: linear-gradient(to right, #673ab7, #9575cd) !important;
     /* Purple shades */
     color: #fff;
 }
 
-.commitment-color {
+.bg-commitment-color {
     background: linear-gradient(to right, #009688, #4db6ac) !important;
     /* Teal shades */
     color: #fff;
