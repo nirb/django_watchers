@@ -1,6 +1,6 @@
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/cards.css' %}">
-<div class="card bg-{{ bg }}" style="width: 100%; cursor: pointer;" onclick="window.location.href='{{ url }}'">
+<div class="card bg-{{ bg }}" style="width: 100%; cursor: pointer;" onclick="openUrl('{{ url }}')">
     <div class="card-header"><strong>{{ title }}</strong></div>
     {% if items %}
     <div class="card-body d-flex flex-wrap p-2">
@@ -12,3 +12,11 @@
     </div>
     {% endif %}
 </div>
+<script>
+    function openUrl(url) {
+        console.log("nir", url);
+        setTimeout(() => {
+            window.location.href = url;
+        }, 3000);
+    }
+</script>

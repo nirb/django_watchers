@@ -1,46 +1,66 @@
 {% load static %}
 <script src="{% static 'js/watchers_plots.js' %}"></script>
 
-
-<div class="spinner-border text-primary" role="status">
-    <span class="visually-hidden">Loading...</span>
-</div>
 <center>
     <div class="row mt-2">
         <div class="col-12 col-sm-4">
-            <div class="card mb-3" id="USD_Statement" style="height: 300px;"></div>
+            <div class="card mb-3" id="USD_Statement" style="height: 300px;">
+                <div class="spinner-border text-primary" id="USD_Statement_spinner" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
         </div>
         <div class="col-12 col-sm-4">
-            <div class="card mb-3" id="NIS_Statement" style="height: 300px;"></div>
+            <div class="card mb-3" id="NIS_Statement" style="height: 300px;">
+                <div class="spinner-border text-primary" id="NIS_Statement_spinner" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
         </div>
         <div class="col-12 col-sm-4">
-            <div class="card mb-3" id="EUR_Statement" style="height: 300px;"></div>
+            <div class="card mb-3" id="EUR_Statement" style="height: 300px;">
+                <div class="spinner-border text-primary" id="EUR_Statement_spinner" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
         </div>
         <div class="col-12 col-sm-4">
-            <div class="card mb-3" id="USD_Distribution" style="height: 300px;"></div>
+            <div class="card mb-3" id="USD_Distribution" style="height: 300px;">
+                <div class="spinner-border text-primary" id="USD_Distribution_spinner" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
         </div>
         <div class="col-12 col-sm-4">
-            <div class="card mb-3" id="NIS_Distribution" style="height: 300px;"></div>
+            <div class="card mb-3" id="NIS_Distribution" style="height: 300px;">
+                <div class="spinner-border text-primary" id="NIS_Distribution_spinner" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
         </div>
         <div class="col-12 col-sm-4">
-            <div class="card mb-3" id="EUR_Distribution" style="height: 300px;"></div>
+            <div class="card mb-3" id="EUR_Distribution" style="height: 300px;">
+                <div class="spinner-border text-primary" id="EUR_Distribution_spinner" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
         </div>
     </div>
 </center>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        fetchWatchersPlotsData("USD", "Statement", on_done);
-        fetchWatchersPlotsData("NIS", "Statement", on_done);
-        fetchWatchersPlotsData("EUR", "Statement", on_done);
-        fetchWatchersPlotsData("USD", "Distribution", on_done);
-        fetchWatchersPlotsData("NIS", "Distribution", on_done);
-        fetchWatchersPlotsData("EUR", "Distribution", on_done);
+        let currencies = ["USD", "NIS", "EUR"];
+        let max_timeout = 2000
+        for (let currency of currencies) {
+            setTimeout(() => {
+                fetchWatchersPlotsData(currency, "Statement", on_done);
+            }, Math.random() * max_timeout);
+            setTimeout(() => {
+                fetchWatchersPlotsData(currency, "Distribution", on_done);
+            }, Math.random() * max_timeout);
+        }
     });
-
-    //document.getElementById('USD_Distribution').addEventListener('click', function () {
-    //    fetchWatchersPlotsData("USD", "Distribution", on_done_full_width);
-    //});
 
     function on_done(data, currency, event_type) {
         let object_id = currency + "_" + event_type;
@@ -53,7 +73,10 @@
     }
 
     function generate_plot(data, event_type, currency, object_id) {
-        document.querySelector('.spinner-border').style.display = 'none';
+        //document.querySelector('.spinner-border').style.display = 'none';
+        let spinner = document.getElementById(currency + "_" + event_type + "_spinner");
+        if (spinner)
+            spinner.style.display = 'none';
         let title = event_type + " - " + currency
         console.log("generate_plot", event_type, currency)
         console.log(data)

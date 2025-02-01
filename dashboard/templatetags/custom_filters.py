@@ -1,5 +1,6 @@
 from django import template
 import calendar
+from decimal import Decimal
 register = template.Library()
 
 
@@ -24,9 +25,14 @@ def month_name(month_number):
 
 
 @register.filter
-def split(value, delimiter=","):
+def split2(value, delimiter=","):
     """Splits a string into a list using the given delimiter."""
     return value.split(delimiter)
+
+
+@register.filter
+def make_list(value):
+    return value.split("-,-")
 
 
 @register.filter
