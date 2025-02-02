@@ -10,13 +10,17 @@
 
 .bg-statement-color {
     background: linear-gradient(to right, #4caf50, #8bc34a) !important;
-    /* Green shades */
     color: #fff;
+}
+
+.bg-watcher-color {
+    background: linear-gradient(160deg, #757ce8, #212121) !important;
+    background: #3e688c !important;
+    color: var(--primary-text-color);
 }
 
 .bg-distribution-color {
     background: linear-gradient(to right, #2196f3, #64b5f6) !important;
-    /* Blue shades */
     color: #fff;
 }
 

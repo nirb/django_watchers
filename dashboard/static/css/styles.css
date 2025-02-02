@@ -1,27 +1,17 @@
 :root {
-    --primary-light-color: #9cb5ff;
-    --primary-main-color: #191970;
-    --primary-dark-color: #12214e;
-    --primary-text-color: #cddaff;
+    --primary-light-color: #c4c4c4;
+    --primary-main-color: #3e688c;
+    --primary-dark-color: rgb(40, 40, 40);
+    --primary-text-color: lightgreen;
+
+    --btn-text-color: black;
+    --btn-hover-color: #acacac;
+
 
     --secondary-light-color: #ff7961;
     --secondary-main-color: #f44336;
     --secondary-dark-color: #ba000d;
     --secondary-text-color: #000;
-
-
-}
-
-:root_old {
-    --primary-light-color: #757ce8;
-    --primary-main-color: #246bdf;
-    --primary-dark-color: #002884;
-    --primary-contrastText-color: #fff;
-
-    --secondary-light-color: #ff7961;
-    --secondary-main-color: #f44336;
-    --secondary-dark-color: #ba000d;
-    --secondary-contrastText-color: #000;
 }
 
 /* Global styles dark mode */
@@ -34,12 +24,25 @@
     background-color: var(--primary-dark-color) !important;
 }
 
+.btn-primary {
+    background-color: var(--primary-light-color);
+    border-color: black;
+    font-style: italic;
+    font-weight: bold;
+    color: var(--primary-dark-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--btn-hover-color);
+    color: var(--primary-text-color);
+}
+
 .app-text-color {
     color: var(--primary-text-color);
 }
 
 .app-card {
-    background-color: white;
+    background-color: transparent;
     padding: 0.5rem;
     margin-top: 16px;
     border-radius: 1rem;

@@ -1,7 +1,6 @@
 from core.defs import *
 
 from datetime import datetime
-from dashboard.models import Event
 
 
 def currency_converter(currency, obj_list):

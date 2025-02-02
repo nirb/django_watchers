@@ -44,7 +44,7 @@
     <li class="nav-item nav-link" onclick="show_table()" id="show_btn">Show in table</li>
 </ul>
 
-<div class="tab-content app-card" id="cards_id">
+<div class="tab-content" id="cards_id">
     {% for currency, watchers in currency_groups.items %}
     {% if watchers %}
     <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="{{ currency }}_tab" role="tabpanel">
@@ -57,7 +57,7 @@
                 {% with url='/watcher/'|add:id %}
                 {% with dist=w.values.Dist_ITD %}
                 {% with items="Value: "|add:value|add:"-,-Dist: "|add:dist|make_list %}
-                {% include html with title=w.name items=items url=url bg=menu.background %}
+                {% include html with title=w.name items=items url=url bg="watcher-color" %}
                 {% endwith %}
                 {% endwith %}
                 {% endwith %}
