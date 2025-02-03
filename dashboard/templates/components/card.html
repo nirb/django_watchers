@@ -1,14 +1,14 @@
 {% load static %} {# If you're using static files for icons #}
 <link rel="stylesheet" type="text/css" href="{% static 'css/cards.css' %}">
 <div class="card l-bg-{{card.base_color}}-dark">
-    <div class="card-statistic-3 p-4">
+    <div class="card-statistic-3 p-4" id="card_container" onclick="click_event('{{ click_event }}')"
+        style="cursor: pointer;">
         <div class="card-icon card-icon-large">
             <i class="fas {{ card.title_icon }}"></i>
         </div>
         <h3 class="text-center" style="font-style: italic;">{{ card.title }}</h3>
         {% if type == 'items_card' %}
-        <div class="container p-0 m-2" style="cursor: pointer;"
-            onclick="window.location.href='/watchers/{{ card.title }}'">
+        <div class="container p-0 m-2">
             {% for item in card.items %}
             <div class="row">
                 <div class="col-6 text-left">
@@ -35,3 +35,26 @@
         {% endif %}
     </div>
 </div>
+<script>
+    // onload function
+    function onload() {
+        // get the card container
+        var card_container = document.getElementById('card_container');
+        // if click_event is defined, add a pointer cursor
+        console.log("onload", '{{card.title}}', '{{ click_event }}', '{{ click_event }}'.length);
+        if (card_container) {
+            if ('{{ click_event }}'.length === 0) {
+                console.log("onload setting cursor to default", '{{card.title}}');
+                card_container.style.cursor = 'default';
+            }
+        }
+    }
+
+    // Call onload function when the HTML is fully loaded
+    document.addEventListener('DOMContentLoaded', onload);
+    function click_event(click_event) {
+        if (click_event) {
+            window.location.href = click_event;
+        }
+    }
+</script>

@@ -15,6 +15,7 @@ from core.defs import *
 from django.contrib import messages
 from django.core.cache import cache
 from django.db.models import F
+import datetime
 
 watchersInfo = WatchersInfo()
 watchersFin = WatchersFin()
@@ -238,18 +239,39 @@ def edit_event(request, event_id):
 
 def events_cards(request, order_by='-date'):
     query_params = request.GET.dict()
-    print(f"events_cards query_params: {query_params}")
+    print(f"events_cards query_params: {query_params=} {order_by=}")
     events = Event.objects.filter(
         parent__user=request.user)
 
     if "type" in query_params:
-        events = events.filter(type__icontains=query_params["type"])
+        if query_params["type"] == "missing":
+            # show missing events (watchers that last event is more than 4 month ago)
+            events_id = []
+            for watcher in Watcher.objects.filter(user=request.user):
+                if not Event.objects.filter(parent=watcher).exists():
+                    pass
+                else:
+                    last_event = Event.objects.filter(
+                        parent=watcher).latest('date')
+                    print(
+                        f"last_event: {type(last_event.date)} {type(datetime.datetime.now().date())} {last_event.date=}")
+                    # convet last_event.date to days since 1970
+                    days_from_now = (datetime.datetime.now().date() -
+                                     datetime.datetime(1970, 1, 1).date()).days
+                    days_from_last_event = (last_event.date -
+                                            datetime.datetime(1970, 1, 1).date()).days
+                    print(f"diff: {days_from_now-days_from_last_event}")
+                    if days_from_now-days_from_last_event > 120:
+                        events_id.append(last_event.id)
+            events = events.filter(id__in=events_id)
+        else:
+            events = events.filter(type__icontains=query_params["type"])
 
     events = events.order_by(order_by)[:50]
 
     menues = [{"title": event.parent.name, "url": f"/watcher/{event.parent.id}",
                "background": event_type_to_color(event.type),
-               "items": [event.date, event.type, int_to_str(event.value, event.parent.currency)]}
+              "items": [event.date, event.type, int_to_str(event.value, event.parent.currency)]}
               for event in events]
     return render(request, 'menues/cards_menu.html', {"menues": menues})
 

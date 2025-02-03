@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container mt-5">
+<div class="container p-4 rounded-4" style="background-color: var(--primary-main-color);">
     <h2>
         {% if edit %}
         Edit
@@ -16,9 +16,18 @@
             {{ form.parent }}
         </div>
         <div class="form-row">
-            <div class="form-group col-md-4">
-                <label for="id_parent">Value</label>
-                {{ form.value }}
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label for="id_parent">Value</label>
+                    {{ form.value }}
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="add_value">Add Value</label>
+                    <input type="number" id="add_value" name="add_value" class="form-control" value="0">
+                </div>
+                <div class="form-group col-md-4 d-flex align-items-end">
+                    <button type="button" class="btn btn-primary w-100" onclick="add()">Add</button>
+                </div>
             </div>
             <div id="type" class="form-group col-md-4">
                 <label for="id_parent">Type</label>
@@ -55,5 +64,16 @@
             description_element.innerHTML = type_element.value
         });
     });
+
+    function add() {
+        const add_value = document.getElementById('add_value').value;
+        const value = document.getElementById('id_value');
+        if (isNaN(parseInt(value.value))) {
+            value.value = parseInt(add_value);
+        }
+        else {
+            value.value = parseInt(value.value) + parseInt(add_value);
+        }
+    }   
 </script>
 {% endblock %}
