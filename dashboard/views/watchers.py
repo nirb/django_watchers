@@ -13,15 +13,17 @@ from core.fin_calcs import get_missing_events
 from utils.converters import currency_to_color, currency_to_name, event_type_to_color, int_to_str, json_keys_to_string_values, list_keys_to_string_values
 import json
 from django.db.models import Q  # Import Q for OR queries
-
+from dashboard.fin.watchers_fin import WatchersFin as wf
 
 watchersInfo = WatchersInfo()
 watchersFin = WatchersFin()
+wF = wf()
 
 
 @login_required
 def dashboard_view(request):
     clear_cache_if_needed()
+    wF.get_statements_values("USD", 12)
     if request.method == "GET":
         watchersFin.calculate_summary(request.user.id)
         context = {"summary_card": get_watchers_summary_card(),
