@@ -4,6 +4,10 @@ Fin2NumbersNoSymbol
 endpoint - watchers-db.cluosayiqd4n.il-central-1.rds.amazonaws.com
 port 3306
 
+currency api fixer
+d9d8ba3b2c455be0f6bb3fdf7bba2779
+example
+http://data.fixer.io/api/2013-12-24?access_key=d9d8ba3b2c455be0f6bb3fdf7bba2779&base=EUR&symbols=USD,ILS
 
 su - watchers 2*FinNumSym
 u - bejerano
@@ -15,7 +19,6 @@ deployment:
 # TODO 
 # on the watcher page - show pending on top
 # show distribution and wires in a list and not in calendare view
-# in qurters graph , calculate according to quertest end
 # calculte profit by reducing wire and adding dist
 # finish report
 # add todo watcher
@@ -23,3 +26,4 @@ deployment:
 # done 
 # messages are showin twice....
 # move add event to the top
+# in qurters graph , calculate according to quertest end

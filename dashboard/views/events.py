@@ -237,42 +237,69 @@ def edit_event(request, event_id):
             return redirect("/watcher/" + str(event.parent.id) + "/")
 
 
+def get_missing_events_ids(request, days=120):
+    events_id = []
+    for watcher in Watcher.objects.filter(user=request.user):
+        if Event.objects.filter(parent=watcher).exists():
+            last_event = Event.objects.filter(
+                parent=watcher).latest('date')
+            print(
+                f"last_event: {type(last_event.date)} {type(datetime.datetime.now().date())} {last_event.date=}")
+            # convet last_event.date to days since 1970
+            days_from_now = (datetime.datetime.now().date() -
+                             datetime.datetime(1970, 1, 1).date()).days
+            days_from_last_event = (last_event.date -
+                                    datetime.datetime(1970, 1, 1).date()).days
+            print(f"diff: {days_from_now-days_from_last_event}")
+            if days_from_now-days_from_last_event > days:
+                events_id.append(last_event.id)
+
+    return events_id
+
+
+def get_unfunded_watcher_events(request):
+    unfunded_watcher_events_ids = []
+    for watcher in Watcher.objects.filter(user=request.user):
+        info = watchersFin.get_watcher_info(watcher.id)
+        print(f"get_unfunded_watcher_events:{watcher.name=} {info[UNFUNDED]=}")
+        if info[UNFUNDED] != 0:
+            if Event.objects.filter(parent=watcher).exists():
+                last_event = Event.objects.filter(
+                    parent=watcher, type=STATEMENT_EVENT_TYPE).latest('date')
+                unfunded_watcher_events_ids.append(last_event.id)
+
+    return unfunded_watcher_events_ids
+
+
 def events_cards(request, order_by='-date'):
     query_params = request.GET.dict()
     print(f"events_cards query_params: {query_params=} {order_by=}")
     events = Event.objects.filter(
         parent__user=request.user)
 
-    if "type" in query_params:
-        if query_params["type"] == "missing":
-            # show missing events (watchers that last event is more than 4 month ago)
-            events_id = []
-            for watcher in Watcher.objects.filter(user=request.user):
-                if not Event.objects.filter(parent=watcher).exists():
-                    pass
-                else:
-                    last_event = Event.objects.filter(
-                        parent=watcher).latest('date')
-                    print(
-                        f"last_event: {type(last_event.date)} {type(datetime.datetime.now().date())} {last_event.date=}")
-                    # convet last_event.date to days since 1970
-                    days_from_now = (datetime.datetime.now().date() -
-                                     datetime.datetime(1970, 1, 1).date()).days
-                    days_from_last_event = (last_event.date -
-                                            datetime.datetime(1970, 1, 1).date()).days
-                    print(f"diff: {days_from_now-days_from_last_event}")
-                    if days_from_now-days_from_last_event > 120:
-                        events_id.append(last_event.id)
-            events = events.filter(id__in=events_id)
+    unfunded_ids = None
+    if TYPE in query_params:
+        if query_params[TYPE] == MISSING:
+            # get events that are missing for more than 120 days
+            events = events.filter(id__in=get_missing_events_ids(request, 120))
+        if query_params[TYPE] == UNFUNDED:
+            unfunded_ids = get_unfunded_watcher_events(request)
+            events = events.filter(id__in=unfunded_ids)
         else:
-            events = events.filter(type__icontains=query_params["type"])
+            events = events.filter(type__icontains=query_params[TYPE])
 
     events = events.order_by(order_by)[:50]
 
-    menues = [{"title": event.parent.name, "url": f"/watcher/{event.parent.id}",
-               "background": event_type_to_color(event.type),
-              "items": [event.date, event.type, int_to_str(event.value, event.parent.currency)]}
-              for event in events]
+    if unfunded_ids is not None:
+        menues = [{"title": event.parent.name, "url": f"/watcher/{event.parent.id}",
+                   "background": event_type_to_color(event.type),
+                   "items": [f"Value: {int_to_str(event.value, event.parent.currency)}", f"Unfunded: {watchersFin.get_watcher_info(event.parent.id)[UNFUNDED_CURRENCY]}"]}
+                  for event in events]
+    else:
+        menues = [{"title": event.parent.name, "url": f"/watcher/{event.parent.id}",
+                   "background": event_type_to_color(event.type),
+                   "items": [event.date, event.type, int_to_str(event.value, event.parent.currency)]}
+                  for event in events]
     return render(request, 'menues/cards_menu.html', {"menues": menues})
 
 

@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 import pymysql
 pymysql.install_as_MySQLdb()
@@ -33,9 +34,10 @@ DEBUG = True
 
 
 ALLOWED_HOSTS = ['192.168.68.65', 'localhost', '127.0.0.1',
-                 '*', 'www.bejeranofin.com', 'bejeranofin.com']
+                 '*', 'www.bejeranofin.com', 'bejeranofin.com', 'https://bejeranofin.com']
 
-
+CSRF_TRUSTED_ORIGINS = ["https://bejeranofin.com",
+                        "https://www.bejeranofin.com"]
 # Application definition
 
 INSTALLED_APPS = [
@@ -138,3 +140,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]

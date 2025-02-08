@@ -29,6 +29,7 @@ function searchResults(searchStr) {
 
 function get_watchers() {
     const watchersList = document.getElementById('watchersListOptions');
+    console.log("get_watchers...")
     fetch("/search_watchers/__all__!")
         .then(response => response.json())
         .then(data => {
@@ -41,6 +42,7 @@ function get_watchers() {
                     content += `<option value="${name}">${name}</option>`;
                     watchers.push(item)
                 });
+                console.log("get_watchers", watchers)
                 watchersList.innerHTML = content;
             }
         })

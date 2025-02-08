@@ -4,15 +4,18 @@ function fetchWatchersPlotsData(currency, events_type, on_done) {
         .then(data => {
             //console.log(currency, data);
             if (events_type !== "Statement") {
+                if (currency === "USD") {
+                    //    console.log("fetchWatchersPlotsData", events_type, currency, data);
+                }
                 // calculate per quarter
                 let quarterlyData = data.reduce((acc, item) => {
                     let date = new Date(item.date);
-                    let quarter = Math.floor((date.getMonth() + 3) / 3);
+                    let quarter = Math.floor(date.getMonth() / 3) + 1;
                     let year = date.getFullYear();
                     let key = `${year}-Q${quarter}`;
 
                     if (!acc[key]) {
-                        acc[key] = { date: new Date(year, quarter * 3 - 1, 1), value: 0 };
+                        acc[key] = { date: new Date(year, (quarter - 1) * 3, 1), value: 0 };
                     }
                     acc[key].value += item.value;
 
@@ -25,6 +28,9 @@ function fetchWatchersPlotsData(currency, events_type, on_done) {
                 });
 
                 data = result;
+                if (currency === "USD") {
+                    //  console.log("fetchWatchersPlotsData", data);
+                }
             }
             on_done(data, currency, events_type);
         });
