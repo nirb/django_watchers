@@ -15,6 +15,9 @@ u - bejerano
 deployment:
 ./scripts/build_and_deploy.sh
 
+development server:
+python3 manage.py runserver 8153
+
 
 # TODO 
 # on the watcher page - show pending on top
