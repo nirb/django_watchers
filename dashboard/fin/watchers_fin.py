@@ -1,3 +1,4 @@
+import json
 from core.defs import *
 from collections import defaultdict
 from datetime import datetime, timedelta
@@ -27,9 +28,9 @@ class WatchersFin:
 
         def first_day_of_next_month(date):
             if date.month == 12:
-                return datetime(date.year + 1, 1, 1)
+                return datetime(date.year + 1, 1, 1).date()
             else:
-                return datetime(date.year, date.month + 1, 1)
+                return datetime(date.year, date.month + 1, 1).date()
 
         # Dictionary to store the last known value for each watcher
         last_known_values = defaultdict(lambda: 0)
@@ -42,10 +43,14 @@ class WatchersFin:
 
             current_date = statement_events[0].date if statement_events else datetime.now(
             ).date()
+            if isinstance(current_date, datetime):
+                current_date = current_date.date()
             # Calculate the start date based on the number_of_months parameter
             end_date = datetime.now().date()
-            start_date = end_date.replace(day=1) - timedelta(days=30 * (number_of_months - 1))
-
+            start_date = end_date.replace(
+                day=1) - timedelta(days=30 * (number_of_months - 1))
+            if isinstance(current_date, datetime):
+                current_date = current_date.date()
             while current_date <= end_date and current_date >= start_date:
                 # Check if there's a statement for the current month
                 current_month_events = [event for event in statement_events if event.date.month ==
@@ -56,9 +61,9 @@ class WatchersFin:
                     last_known_values[watcher.id] = last_event.value
                 # Append the last known value for the current month
                 statements_list.append(
-                    {"date": current_date, "value": last_known_values[watcher.id]})
+                    {"date": current_date.strftime('%Y-%m-%d'), "value": int(last_known_values[watcher.id])})
                 # Move to the next month
                 current_date = first_day_of_next_month(current_date)
 
-        print(statements_list)
+        print(json.dumps(statements_list, indent=2))
         return statements_list

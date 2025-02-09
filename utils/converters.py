@@ -1,6 +1,6 @@
 from core.defs import *
 
-import requests
+# import requests
 import datetime
 import json
 
