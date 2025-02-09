@@ -41,7 +41,7 @@ class WatchersInfo:
     @debug_func
     def _generate_info(self):
         watchers = watchersFin.get_watchers(self.user_id).order_by(
-            NAME).order_by(CURRENCY)
+            NAME).order_by(CURRENCY).filter(type=INVESTMENT_WATCHER_TYPES[0])
         print("_generate_info", self.user_id, len(watchers))
 
         self.info = {}

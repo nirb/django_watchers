@@ -23,6 +23,17 @@
     {% endwith %}
     {% endwith %}
     {% endfor %}
+    {% for card in tasks %}
+    {% with card=card %}
+    {% with type='items_card' %}
+    {% with click_event='/watchers/'|add:card.title %}
+    <div class="col-sm-4 mb-2">
+        {% include "components/card.html" %}
+    </div>
+    {% endwith %}
+    {% endwith %}
+    {% endwith %}
+    {% endfor %}
     {% include "watchers/watchers_plots.html" %}
 </div>
 {% endblock %}

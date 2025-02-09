@@ -5,6 +5,7 @@ from core.defs import *
 from core.watchers_fin import WatchersFin
 from core.watchers_info import WatchersInfo
 from dashboard.models import Watcher
+from dashboard.views.tasks import get_tasks_cards
 from utils.cache import clear_cache_if_needed
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -27,7 +28,8 @@ def dashboard_view(request):
     if request.method == "GET":
         watchersFin.calculate_summary(request.user.id)
         context = {"summary_card": get_watchers_summary_card(),
-                   "currency_cards": get_currency_cards()}
+                   "currency_cards": get_currency_cards(),
+                   "tasks":get_tasks_cards(request.user.id)}
         return render(request, 'dashboard.html', context)
 
 

@@ -24,6 +24,7 @@ class Watcher(models.Model):
     TYPE_CHOICES = [
         ('Investment', 'Investment'),
         ('Birthday', 'Birthday'),
+        ('Tasks', 'Tasks'),
     ]
 
     name = models.CharField(max_length=100, unique=True)
