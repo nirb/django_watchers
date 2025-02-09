@@ -38,6 +38,7 @@ MONTHS = "months"
 YEARS = "years"
 COUNT = "count"
 
+TASKS = "tasks"
 INVESTMENT_WATCHER_TYPES = ["Investment"]
 OTHER_WATCHER_TYPES = ["Task", "Birthday"]
 WATCHER_TYPES = INVESTMENT_WATCHER_TYPES + OTHER_WATCHER_TYPES
