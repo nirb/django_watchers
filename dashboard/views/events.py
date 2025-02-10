@@ -154,9 +154,11 @@ def create_event(request):
     return render(request, "events/create_event.html", context)
 
 
-@ login_required
+@login_required
 def create_event_form(request, watcher_name=None):
+    event_type = ""
     if request.method == 'POST':
+        print("create_event_form", request.POST)
         form = EventForm2(request.POST)
         if form.is_valid():
             form.save()
@@ -164,21 +166,24 @@ def create_event_form(request, watcher_name=None):
             messages.success(request, msg)
             watchersInfo.reset()
             if watcher_name:
-                watcher = watchersFin.get_watcher(
-                    request.user.id, watcher_name)
-                if watcher:
-                    return redirect(f'/watcher/{watcher.id}/')
-
+                return redirect(f'/watchers/{watcher_name}/')
             return redirect(request.META.get('HTTP_REFERER', '/'))
+        print("create_event_form", form.errors)
     else:
         if watcher_name:
             watcher = get_object_or_404(Watcher, name=watcher_name)
-            form = EventForm2(initial={'parent': watcher})
+            if watcher.type in INVESTMENT_WATCHER_TYPES:
+                form = EventForm2(initial={'parent': watcher})
+            else:
+                event_type = TODO
+                form = EventForm2(
+                    initial={'parent': watcher, 'value': 5, 'type': TODO})
         else:
             form = EventForm2()
 
     print(f"create_event_form {watcher_name=}")
-    return render(request, 'events/event_form.html', {'form': form, "cancel_url": request.META.get('HTTP_REFERER', '/')})
+    return render(request, 'events/event_form.html',
+                  {'form': form, 'event_type': event_type, "cancel_url": request.META.get('HTTP_REFERER', '/')})
 
 
 def events_table_view(request, watcher_id):

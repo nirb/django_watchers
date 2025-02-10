@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="stylesheet" href="{% static 'css/tables.css' %}">
     <link rel="stylesheet" href="{% static 'css/search.css' %}">
-
+    <link rel="stylesheet" type="text/css" href="{% static 'css/cards.css' %}">
     <link rel="icon" type="image/x-icon" href="{% static 'icons/favicon.png' %}">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="{% static 'js/search.js' %}"></script>
@@ -103,9 +103,9 @@
     {% endif %}
 </body>
 <script>
-    window.addEventListener('load', (event) => {
-        get_watchers();
-    });
+    //window.addEventListener('load', (event) => {
+    //    get_watchers();
+    //});
 
     if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register("/static/js/service-worker.js")

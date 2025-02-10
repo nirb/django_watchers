@@ -53,7 +53,7 @@ urlpatterns = [
     # watchers
     path('', dashboard_view, name='dashboard'),
     path('watchers/', watchers_view, name='watchers'),
-    path('watchers/<str:currency>/', watchers_currency, name='watchers'),
+    path('watchers/<str:filter>/', watchers_filter, name='watchers'),
     path('watcher/<int:watcher_id>/', watcher_view, name='watchers'),
     path("create_watcher/", create_watcher, name="create_watcher"),
     path("create_watcher_form/", watcher_form, name="create_watcher_form"),

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    {% for t in tasks %}
+    {% with card=t %}
+    {% with type='summary_card' %}
+    <div class="col-sm-12 col-md-4 mb-2 mt-2">
+        {% include "components/card.html" %}
+    </div>
+    {% endwith %}
+    {% endwith %}
+    {% endfor %}
+</div>
+
+
+<!-- <div>{{ watcher_name }}</div>
+<div>
+    <a href="/create_event_form/{{watcher_name}}" class="btn btn-primary">
+        <span>Add event</span>
+    </a>
+</div>
+<div class="row mt-4">
+    {% for i in items %}
+    <div class="col col-md-4">
+        {% include "components/todo_card.html" with title=i.e.description date=i.e.date bg=i.bg url=i.url %}
+    </div>
+    {% endfor %}
+</div> -->
+{% endblock %}

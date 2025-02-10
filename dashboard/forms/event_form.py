@@ -20,6 +20,6 @@ class EventForm2(forms.ModelForm):
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'parent': forms.Select(attrs={'class': 'form-control'}),
             'type': forms.Select(attrs={'class': 'form-control'}),
-            'value': forms.NumberInput(attrs={'class': 'form-control'}),
+            'value': forms.NumberInput(attrs={'class': 'form-control', 'value': 0}),
             'date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
         }

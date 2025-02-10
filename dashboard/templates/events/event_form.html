@@ -11,12 +11,12 @@
     </h2>
     <form method="post" class="p-3 form-border">
         {% csrf_token %}
-        <div class="form-group">
+        <div class="form-group" {% if "event_type=='TODO'" %} style="display:none;" {% endif %}>
             <label id="parent" for="id_parent">Watcher</label>
             {{ form.parent }}
         </div>
         <div class="form-row">
-            <div class="row">
+            <div class="row" {% if "event_type=='TODO'" %} style="display:none;" {% endif %}>
                 <div class="form-group col-md-4">
                     <label for="id_parent">Value</label>
                     {{ form.value }}
@@ -29,7 +29,7 @@
                     <button type="button" class="btn btn-primary w-100" onclick="add()">Add</button>
                 </div>
             </div>
-            <div id="type" class="form-group col-md-4">
+            <div id="type" class="form-group col-md-4" {% if "event_type=='TODO'" %} style="display:none;" {% endif %}>
                 <label for="id_parent">Type</label>
                 {{ form.type }}
             </div>
@@ -58,11 +58,13 @@
     document.addEventListener("DOMContentLoaded", () => {
         const type_element = document.getElementById('id_type');
         const description_element = document.getElementById('id_description');
-
-        // Submit the form automatically when a file is selected
-        type_element.addEventListener("change", () => {
-            description_element.innerHTML = type_element.value
-        });
+        if (type_element && description_element) {
+            // Submit the form automatically when a file is selected
+            type_element.addEventListener("change", () => {
+                description_element.innerHTML = type_element.value
+            });
+        }
+        value.value = 0;
     });
 
     function add() {

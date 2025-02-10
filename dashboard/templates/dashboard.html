@@ -6,24 +6,23 @@
     <!-- show the summary card -->
     {% with card=summary_card %}
     {% with type='summary_card' %}
-    <div class="col-sm-12 mb-2 mt-2">
+    <div class="col-sm-12 col-md-8 mb-2 mt-2">
         {% include "components/card.html" %}
     </div>
+    {% endwith %}
+    {% endwith %}
+    <!-- show the tasks cards -->
+    {% with card=tasks %}
+    {% with type='items_card' %}
+    {% with click_event='/watchers/tasks' %}
+    <div class="col-sm-12 col-md-4 mb-2 mt-2">
+        {% include "components/card.html" %}
+    </div>
+    {% endwith %}
     {% endwith %}
     {% endwith %}
     <!-- show the currency cards -->
     {% for card in currency_cards %}
-    {% with card=card %}
-    {% with type='items_card' %}
-    {% with click_event='/watchers/'|add:card.title %}
-    <div class="col-sm-4 mb-2">
-        {% include "components/card.html" %}
-    </div>
-    {% endwith %}
-    {% endwith %}
-    {% endwith %}
-    {% endfor %}
-    {% for card in tasks %}
     {% with card=card %}
     {% with type='items_card' %}
     {% with click_event='/watchers/'|add:card.title %}

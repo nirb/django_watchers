@@ -1,11 +1,11 @@
-from django.http import JsonResponse
+from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from core.defs import *
 from core.watchers_fin import WatchersFin
 from core.watchers_info import WatchersInfo
 from dashboard.models import Watcher
-from dashboard.views.tasks import get_tasks_cards
+from dashboard.views.tasks import get_tasks_cards, get_tasks_summary_card, get_task_watchers
 from utils.cache import clear_cache_if_needed
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -29,7 +29,7 @@ def dashboard_view(request):
         watchersFin.calculate_summary(request.user.id)
         context = {"summary_card": get_watchers_summary_card(),
                    "currency_cards": get_currency_cards(),
-                   "tasks":get_tasks_cards(request.user.id)}
+                   "tasks": get_tasks_summary_card(request.user.id)}
         return render(request, 'dashboard.html', context)
 
 
@@ -60,21 +60,30 @@ def watchers_view(request):
     # show watchers table with currency tabs
     clear_cache_if_needed()
     if request.method == "GET":
-        return render(request, 'watchers/watchers.html', watchersInfo.get(request.user.id))
+        context = watchersInfo.get(request.user.id)
+        print("!!!! watchers_view 'watchers/watchers.html'",
+              json.dumps(context, indent=2), flush=True)
+        return render(request, 'watchers/watchers.html', context)
 
 
 @login_required
-def watchers_currency(request, currency):
+def watchers_filter(request, filter):
     # show watchers table with currency tabs (selected currency)
     clear_cache_if_needed()
     if request.method == "GET":
         wi = watchersInfo.get(request.user.id)
-        context = {"currency_groups": {
-            currency: wi["currency_groups"][currency]}}
-        for c in CURRENCY_TYPES:  # add all other currencies
-            if c != currency:
-                context["currency_groups"][c] = wi["currency_groups"][c]
-        return render(request, 'watchers/watchers.html', context)
+        if filter in CURRENCY_TYPES:
+            currency = filter
+            context = {"currency_groups": {
+                currency: wi["currency_groups"][currency]}}
+            for c in CURRENCY_TYPES:  # add all other currencies
+                if c != currency:
+                    context["currency_groups"][c] = wi["currency_groups"][c]
+            return render(request, 'watchers/watchers.html', context)
+        elif filter == TASKS:  # show tasks watchers
+            return render(request, 'watchers/watchers_tasks.html',
+                          context={"tasks": get_tasks_cards(request.user.id)})
+        raise Http404("Page not found")
 
 
 @login_required
@@ -101,8 +110,9 @@ def watcher_view(request, watcher_id):
             watchersInfo.update_watcher_data_over_time(watcher)
             # print("watcher_view", json.dumps(context, indent=2))
         else:
-            context = {"name": watcher.name,
+            context = {"name": watcher.name, "type": watcher.type,
                        "missing_events": "No Events for this watcher"}
+    print("watcher_view - 'watchers/watcher.html' ", context)
 
     return render(request, 'watchers/watcher.html', context)
 

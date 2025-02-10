@@ -73,6 +73,11 @@
     color: #fff;
 }
 
+.l-bg-yellow-dark {
+    background: linear-gradient(to right, #FFDF00, #fff197) !important;
+    color: red;
+}
+
 .card-icon-large {
     font-size: 110px;
 }

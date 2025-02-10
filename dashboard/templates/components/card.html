@@ -1,5 +1,16 @@
-{% load static %} {# If you're using static files for icons #}
-<link rel="stylesheet" type="text/css" href="{% static 'css/cards.css' %}">
+<!-- <div>
+input: card 
+    card.base_color
+    card.title
+    card.title_icon
+    card.items - list of:
+        item.text_left
+        item.text_right
+input click_event
+    click_event - url to redirect to when the card is clicked
+</div> -->
+
+
 <div class="card l-bg-{{card.base_color}}-dark">
     <div class="card-statistic-3 p-4" id="card_container" onclick="click_event('{{ click_event }}')"
         style="cursor: pointer;">

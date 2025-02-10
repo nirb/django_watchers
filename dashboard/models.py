@@ -4,6 +4,7 @@ from django.contrib.auth.models import User  # For linking Watcher to a user
 from django.utils.timezone import now
 
 from core.defs import INVESTMENT_WATCHER_TYPES, STATEMENT_EVENT_TYPE
+import json
 
 
 class Advisor(models.Model):
@@ -42,8 +43,6 @@ class Watcher(models.Model):
     def __str__(self):
         return f"Watcher - {self.name} ({self.type})"
 
-    # return all events of the watcher,
-    # in case of investment watcher add a statement event with 0 value as the first event
     def get_events(self, filter_type=None):
         if filter_type:
             events = list(self.events.filter(
@@ -55,6 +54,19 @@ class Watcher(models.Model):
             events.append(Event(
                 description="Initial Statement", date=events[len(events)-1].date, parent=self, type=STATEMENT_EVENT_TYPE, value=0))
         return events
+
+    def to_dict(self):
+        return {
+            "name": self.name,
+            "active": self.active,
+            "advisor": self.advisor.name,
+            "currency": self.currency,
+            "type": self.type,
+            "user": self.user.username,
+        }
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
 
 class InvestmentWatcher(Watcher):
@@ -73,6 +85,7 @@ class Event(models.Model):
         ('Capital Call Notice', 'Capital Call Notice'),
         ('Wire Receipt', 'Wire Receipt'),
         ('Commitment', 'Commitment'),
+        ('TODO', 'TODO'),
     ]
 
     description = models.TextField()
