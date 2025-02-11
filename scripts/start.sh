@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Navigate to the project directory
-cd /Users/nirbejerano/development/django_watchers
+#cd /Users/nirbejerano/development/django_watchers
 
 # Activate the virtual environment
-source venv/bin/activate
+#source venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt

@@ -266,6 +266,8 @@ def get_unfunded_watcher_events(request):
     unfunded_watcher_events_ids = []
     for watcher in Watcher.objects.filter(user=request.user):
         info = watchersFin.get_watcher_info(watcher.id)
+        if info is None:
+            continue
         print(f"get_unfunded_watcher_events:{watcher.name=} {info[UNFUNDED]=}")
         if info[UNFUNDED] != 0:
             if Event.objects.filter(parent=watcher).exists():
