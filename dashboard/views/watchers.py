@@ -11,7 +11,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from dashboard.forms.watcher_form import WatcherForm2
 from core.fin_calcs import get_missing_events
-from utils.converters import currency_to_color, currency_to_name, event_type_to_color, int_to_str, json_keys_to_string_values, list_keys_to_string_values
+from utils.converters import AppJSONEncoder, currency_to_color, currency_to_name, event_type_to_color, int_to_str, json_keys_to_string_values, list_keys_to_string_values
 import json
 from django.db.models import Q  # Import Q for OR queries
 from dashboard.fin.watchers_fin import WatchersFin as wf
@@ -112,8 +112,9 @@ def watcher_view(request, watcher_id):
         else:
             context = {"name": watcher.name, "type": watcher.type,
                        "missing_events": "No Events for this watcher"}
-    print("watcher_view - 'watchers/watcher.html' ", context)
 
+    print("watcher_view - 'watchers/watcher.html' ",
+          json.dumps(context, indent=2, cls=AppJSONEncoder), flush=True)
     return render(request, 'watchers/watcher.html', context)
 
 

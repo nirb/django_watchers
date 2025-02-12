@@ -166,7 +166,9 @@ def create_event_form(request, watcher_name=None):
             messages.success(request, msg)
             watchersInfo.reset()
             if watcher_name:
-                return redirect(f'/watchers/{watcher_name}/')
+                w = watchersFin.get_watcher(request.user.id, watcher_name)
+                if w:
+                    return redirect(f'/watcher/{w.id}/')
             return redirect(request.META.get('HTTP_REFERER', '/'))
         print("create_event_form", form.errors)
     else:

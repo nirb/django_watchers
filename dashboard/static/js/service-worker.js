@@ -1,7 +1,7 @@
 const CACHE_NAME = "django-pwa-cache-v1";
 const urlsToCache = [
     "/",
-    "/static/css/style.css",
+    "/static/css/styles.css",
     "/static/icons/192.png"];
 
 self.addEventListener("install", event => {

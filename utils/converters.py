@@ -1,8 +1,11 @@
+from decimal import Decimal
 from core.defs import *
 
 # import requests
 import datetime
 import json
+
+from dashboard.models import Event, Watcher
 
 
 def currency_converter(currency, obj_list):
@@ -27,18 +30,6 @@ def currency_to_color(currency):
 
 def currency_to_name(currency):
     return currency_converter(currency, CURRENCY_NAMES)
-
-
-def currency_conversion(value, currency, to_currency):
-    USD2NIS = 3.61355
-    USD2EUR = 0.9717
-    conversions = {"usd2nis": USD2NIS, "usd2eur": USD2EUR,
-                   "nis2usd": 1 / USD2NIS, "nis2eur": USD2EUR/USD2NIS,
-                   "eur2usd": 1/USD2EUR, "eur2nis": USD2NIS/USD2EUR}
-    if currency == to_currency:
-        return value
-
-    return value * conversions[f"{currency.lower()}2{to_currency.lower()}"]
 
 
 def int_to_str(value, currency=None):
@@ -158,6 +149,18 @@ def fetch_exchange_rates():
                         datetime.timedelta(days=32)).replace(day=1)
 
     return results
+
+
+def currency_conversion(value, currency, to_currency):
+    now = datetime.datetime.now()
+    rate = get_rate(now.year, now.month)
+    conversions = {"usd2nis": rate['ILS'], "usd2eur": rate['EUR'],
+                   "nis2usd": 1 / rate['ILS'], "nis2eur": rate['EUR']/rate['ILS'],
+                   "eur2usd": 1/rate['EUR'], "eur2nis": rate['ILS']/rate['EUR']}
+    if currency == to_currency:
+        return value
+
+    return value * conversions[f"{currency.lower()}2{to_currency.lower()}"]
 
 
 # print(json.dumps(fetch_exchange_rates(), indent=2))
@@ -378,3 +381,33 @@ def get_rate(year, month):
 
 
 print("nirnir", get_rate(2025, 4))
+
+
+class AppJSONEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Event):  # Handle Event objects
+            return {
+                "id": obj.id,
+                "description": obj.description,
+                "parent_id": obj.parent.id if obj.parent else None,
+                "type": obj.type,
+                # Convert Decimal to float
+                "value": str(obj) if isinstance(obj, str) else obj.value,
+                # Convert DateField to string
+                "date": obj.date.strftime("%Y-%m-%d"),
+            }
+        if isinstance(obj, Watcher):  # Handle Watcher objects
+            return {
+                "id": obj.id,
+                "name": obj.name,
+                "active": obj.active,
+                "advisor": obj.advisor.name,
+                "currency": obj.currency,
+                "type": obj.type,
+                "user": obj.user.username,
+            }
+        elif isinstance(obj, Decimal):  # Convert Decimal to float
+            return float(obj)
+        elif isinstance(obj, datetime.date):  # Convert date to string
+            return obj.strftime("%Y-%m-%d")
+        return super().default(obj)  # Use default behavior for other types

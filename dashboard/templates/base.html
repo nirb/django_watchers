@@ -40,14 +40,16 @@
     </style>
     <title>{% block title %}Watchers AI{% endblock %}</title>
 </head>
+<!-- <div class="hstack justify-content-around"> -->
 
 <body>
     {% if user.is_authenticated %}
     <nav class="navbar bg-primary border-bottom sticky-top pb-2">
-        <div class="container-fluid">
+        <div class="hstack justify-content-between w-100 px-4">
             <a class="navbar-brand" style="color: var(--primary-light-color);" href="/">
                 <i class="fa-regular fa-eye"></i>
             </a>
+            <h3 class="app-text-color" id="page_name">Dashboard</h3>
             <div class="d-flex">
                 <div class="search-box me-2">
                     <button class="btn-search border-0 p-2"
@@ -103,9 +105,9 @@
     {% endif %}
 </body>
 <script>
-    //window.addEventListener('load', (event) => {
-    //    get_watchers();
-    //});
+    window.addEventListener('load', (event) => {
+        get_watchers();
+    });
 
     if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register("/static/js/service-worker.js")

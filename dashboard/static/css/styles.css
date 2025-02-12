@@ -44,12 +44,12 @@
 .app-card {
     background-color: transparent;
     padding: 0.5rem;
-    margin-top: 16px;
+    margin-top: 0px;
     border-radius: 1rem;
 }
 
 .app-data-item {
-    background-color: lightgray;
+    background-color: rgb(164, 255, 164);
     border-radius: 1rem;
     text-align: center;
 }
