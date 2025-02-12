@@ -8,6 +8,8 @@
     <li>
         <hr class="dropdown-divider">
     </li>
-    <button id="install-button" style="display: none;">Install App</button>
+    <button class="dropdown-item" id="install-button" style="color:green; font-weight: bold;">
+        Install App - Recomended
+    </button>
     <a class="dropdown-item" href="{% url 'logout' %}">Logout ({{ user.username }})</a>
 </ul>

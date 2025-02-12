@@ -78,13 +78,15 @@
         if (spinner)
             spinner.style.display = 'none';
         let title = event_type + " - " + currency
-        console.log("generate_plot", event_type, currency)
-        console.log(data)
         // leave only the 12 latest elements in the dada array
         if (event_type == "Statement") {
             data = data.slice(-12);
             title = currency + " " + get_profit(data);
         }
+        if (event_type == "Distribution") {
+            title+= " (per Quarter)"
+        }
+        console.log("generate_plot", event_type, currency, title)
         console.log(data)
 
         generateCurrencyPlot(data, title, "", "", object_id);
