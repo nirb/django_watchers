@@ -1,7 +1,6 @@
 .search-box {
-    width: fit-content;
-    height: fit-content;
-    position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .input-search {
