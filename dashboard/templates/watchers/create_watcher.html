@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2>Add Watcher</h2>
-    <form method="post" class="p-3 form-border">
+<div style="height: 20px;"></div>
+<div class="container p-4 rounded-4" style="background-color: var(--primary-dialog-color);">
+    <form method="post">
         {% csrf_token %}
         <div class="form-group">
             <label for="id-parent">Watcher name</label>
@@ -27,10 +27,16 @@
                 {{ form.active }}
             </div>
         </div>
-        <div class="text-right">
+        <div class="text-right pt-2">
             <a href="{% url 'watchers' %}" class="btn btn-secondary">Cancel</a>
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>
     </form>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let page_name = document.getElementById("page_name");
+        page_name.innerHTML = "Add Watcher";
+    });
+</script>
 {% endblock %}

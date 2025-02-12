@@ -1,6 +1,7 @@
 :root {
     --primary-light-color: #c4c4c4;
-    --primary-main-color: #3e688c;
+    --primary-main-color: rgb(13, 110, 253);
+    --primary-dialog-color: rgb(156, 195, 255);
     --primary-dark-color: rgb(40, 40, 40);
     --primary-text-color: lightgreen;
 
@@ -25,15 +26,15 @@
 }
 
 .btn-primary {
-    background-color: var(--primary-light-color);
-    border-color: black;
+    background-color: var(--primary-main-color);
+    border-color: transparent;
     font-style: italic;
     font-weight: bold;
     color: var(--primary-dark-color);
 }
 
 .btn-primary:hover {
-    background-color: var(--btn-hover-color);
+    background-color: blue;
     color: var(--primary-text-color);
 }
 

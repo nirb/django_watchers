@@ -15,10 +15,10 @@
 }
 
 .input-search:focus {
-    width: 300px;
+    width: 500px;
 
     @media (max-width: 600px) {
-        width: 150px;
+        width: 250px;
     }
 
     border-radius: 16px;
@@ -35,10 +35,10 @@
 }
 
 .btn-search:focus~.input-search {
-    width: 300px;
+    width: 500px;
 
     @media (max-width: 600px) {
-        width: 150px;
+        width: 250px;
     }
 
     border-radius: 16px;

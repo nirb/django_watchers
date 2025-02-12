@@ -45,17 +45,17 @@
 <body>
     {% if user.is_authenticated %}
     <nav class="navbar bg-primary border-bottom sticky-top pb-2">
-        <div class="hstack justify-content-between w-100 px-4">
-            <a class="col-3 navbar-brand" style="color: var(--primary-light-color);" href="/">
+        <div class="hstack justify-content-between w-100 px-3">
+            <a class="col-3 navbar-brand m-0 p-0" style="color: var(--primary-main-color);" href="/">
                 <i class="fa-regular fa-eye"></i>
             </a>
-            <h3 class="col-6 text-center app-text-color" id="page_name">Dashboard</h3>
-            <div class="col-3 d-flex justify-content-end pe-2 align-items-center">
+            <h3 class="col-6 text-center app-text-color m-0" id="page_name">Dashboard</h3>
+            <div class="col-3 d-flex justify-content-end m-0 p-0 align-items-center">
                 <div class="search-box">
                     <button class="btn-search border-0 p-2"
                         style="background-color: transparent; color: var(--primary-light-color);"
                         onclick="document.querySelector('.input-search').focus();">
-                        <i class="fas fa-search"></i>
+                        <i class="fas fa-search" style="color: var(--primary-main-color);"></i>
                     </button>
                     <input type="text" list="watchersListOptions" class="input-search" placeholder="Type to Search..."
                         oninput="if(true) {     
