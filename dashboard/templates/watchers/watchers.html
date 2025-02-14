@@ -183,9 +183,23 @@
             });
         });
 
-        let page_name = document.getElementById("page_name");
-        page_name.innerHTML = "Watchers";
+        change_page_name();
     });
+
+    document.addEventListener("click", () => {
+        change_page_name();
+    });
+
+    function change_page_name() {
+        setTimeout(() => {
+            const activeTab = document.querySelector(".nav-link.active");
+            if (activeTab) {
+                const currency = activeTab.textContent.trim();
+                let page_name = document.getElementById("page_name");
+                page_name.innerHTML = "Watchers - " + currency;
+            }
+        }, 500);
+    }
 
     function sortTable(column) {
         const table = document.querySelector("table tbody");

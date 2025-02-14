@@ -20,10 +20,11 @@ python3 manage.py runserver 8153
 
 
 # TODO 
+# finish report
+# support multitanent
 # on the watcher page - show pending on top
 # show distribution and wires in a list and not in calendare view
 # calculte profit by reducing wire and adding dist
-# finish report
 # add todo watcher
 
 # done 

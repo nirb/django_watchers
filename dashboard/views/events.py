@@ -288,18 +288,26 @@ def events_cards(request, order_by='-date'):
     events = Event.objects.filter(
         parent__user=request.user)
 
+    page_name = "Latest Events"
+
     unfunded_ids = None
     if TYPE in query_params:
         if query_params[TYPE] == MISSING:
             # get events that are missing for more than 120 days
             events = events.filter(id__in=get_missing_events_ids(request, 120))
+            page_name = "Missing Events"
         if query_params[TYPE] == UNFUNDED:
             unfunded_ids = get_unfunded_watcher_events(request)
             events = events.filter(id__in=unfunded_ids)
+            events = sorted(events, key=lambda e: int(watchersFin.get_watcher_info(
+                e.parent.id)[UNFUNDED]))
+            page_name = "Unfunded Events"
         else:
+            page_name = f"{query_params[TYPE].upper()} Events"
             events = events.filter(type__icontains=query_params[TYPE])
 
-    events = events.order_by(order_by)[:50]
+    if not isinstance(events, list):
+        events = events.order_by(order_by)[:100]
 
     if unfunded_ids is not None:
         menues = [{"title": event.parent.name, "url": f"/watcher/{event.parent.id}",
@@ -311,7 +319,7 @@ def events_cards(request, order_by='-date'):
                    "background": event_type_to_color(event.type),
                    "items": [event.date, event.type, int_to_str(event.value, event.parent.currency)]}
                   for event in events]
-    return render(request, 'menues/cards_menu.html', {"menues": menues})
+    return render(request, 'menues/cards_menu.html', {"menues": menues, "page_name": page_name})
 
 
 def delete_event(request, event_id):

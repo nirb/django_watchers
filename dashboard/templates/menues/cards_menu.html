@@ -14,4 +14,10 @@
     <h3 class="p-4" style="color: red;">No Watchers found !!!</h3>
     {% endif %}
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let page_name = document.getElementById("page_name");
+        page_name.innerHTML = "{{ page_name }}";
+    });
+</script>
 {% endblock %}
