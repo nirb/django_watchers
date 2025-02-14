@@ -151,9 +151,8 @@ def fetch_exchange_rates():
     return results
 
 
-def currency_conversion(value, currency, to_currency):
-    now = datetime.datetime.now()
-    rate = get_rate(now.year, now.month)
+def currency_conversion(value, currency, to_currency, in_date=datetime.datetime.now()):
+    rate = get_rate(in_date.year, in_date.month)
     conversions = {"usd2nis": rate['ILS'], "usd2eur": rate['EUR'],
                    "nis2usd": 1 / rate['ILS'], "nis2eur": rate['EUR']/rate['ILS'],
                    "eur2usd": 1/rate['EUR'], "eur2nis": rate['ILS']/rate['EUR']}

@@ -30,6 +30,8 @@ def dashboard_view(request):
         context = {"summary_card": get_watchers_summary_card(),
                    "currency_cards": get_currency_cards(),
                    "tasks": get_tasks_summary_card(request.user.id)}
+        print("dashboard_view", json.dumps(
+            context, cls=AppJSONEncoder, indent=2))
         return render(request, 'dashboard.html', context)
 
 

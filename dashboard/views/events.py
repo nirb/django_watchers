@@ -270,12 +270,14 @@ def get_unfunded_watcher_events(request):
         info = watchersFin.get_watcher_info(watcher.id)
         if info is None:
             continue
-        print(f"get_unfunded_watcher_events:{watcher.name=} {info[UNFUNDED]=}")
+        print(f"get_unfunded_watcher_events:{watcher.name=}")
         if info[UNFUNDED] != 0:
             if Event.objects.filter(parent=watcher).exists():
-                last_event = Event.objects.filter(
-                    parent=watcher, type=STATEMENT_EVENT_TYPE).latest('date')
-                unfunded_watcher_events_ids.append(last_event.id)
+                events = Event.objects.filter(
+                    parent=watcher, type=STATEMENT_EVENT_TYPE)
+                if events.exists():
+                    last_event = events.latest('date')
+                    unfunded_watcher_events_ids.append(last_event.id)
 
     return unfunded_watcher_events_ids
 

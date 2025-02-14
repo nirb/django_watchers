@@ -1,10 +1,11 @@
 
+import datetime
 import json
 from core.defs import *
 from core.fin_calcs import calculate_investment_info
 from core.monthly_values import get_monthly_values
 from dashboard.models import Watcher
-from utils.converters import currency_conversion, int_to_str
+from utils.converters import currency_conversion, date_str_to_datetime, int_to_str
 from utils.debug import d_print, debug_func
 
 
@@ -46,6 +47,7 @@ class WatchersFin:
 
         self.watchers = Watcher.objects.filter(user_id=user_id).order_by(
             NAME).order_by(CURRENCY)
+        self.get_total_values_monthly(user_id, "NIS")
 
         self.calculate_currency_sum()
         self.convert_sum_values_to_str()
@@ -77,7 +79,7 @@ class WatchersFin:
         # set watcher fin_info, calculate the total values for all watchers
         for watcher in self.watchers:
             if watcher.type in INVESTMENT_WATCHER_TYPES:
-                print("calculate_currency_sum", watcher.name)
+                #print("calculate_currency_sum", watcher.name)
                 fin_info = calculate_investment_info(watcher.get_events())
                 fin_info[UNFUNDED_CURRENCY] = int_to_str(
                     fin_info[UNFUNDED], watcher.currency)
@@ -95,7 +97,7 @@ class WatchersFin:
             else:
                 d_print("watcher type not in INVESTMENT_WATCHER_TYPES")
 
-    @ debug_func
+    @debug_func
     def convert_sum_values_to_str(self):
         # convert the values to string with currency
         for currency in CURRENCY_TYPES:
@@ -106,7 +108,7 @@ class WatchersFin:
             self.currency_sum[currency][UNFUNDED] = int_to_str(
                 self.currency_sum[currency][UNFUNDED_NUM], currency)
 
-    @ debug_func
+    @debug_func
     def calculate_total_assets_in_currencies(self):
         # set the current values for each currency
         total_assets_in_currencies = {c: 0 for c in CURRENCY_TYPES}
@@ -165,3 +167,35 @@ class WatchersFin:
             #      json.dumps(monethly_values, indent=2))
         sorted_sum = dict(sorted(total_sum_per_month.items()))
         return [{"date": date_str, "value": value} for date_str, value in sorted_sum.items()]
+
+    def get_total_values_monthly(self, user_id, to_currency="USD"):
+        total_values = None
+
+        # put the to_currency in the first place
+        currencies = [to_currency] + \
+            [c for c in CURRENCY_TYPES if c != to_currency]
+
+        for currency in currencies:
+            sum_per_month = self.get_watchers_sum_per_month(
+                self.get_watchers(user_id).filter(currency=currency), currency, STATEMENT_EVENT_TYPE)
+            if total_values is None:
+                total_values = sum_per_month
+                continue
+
+            if currency == "NIS":
+                print("x")
+
+            for item in sum_per_month:
+                date_str = item['date']
+                value = item['value']
+                if value > 0:
+                    index = next((i for i, item in enumerate(
+                        total_values) if item['date'] == date_str), None)
+                    if index is not None:
+                        if currency != to_currency:
+                            total_values[index]['value'] += currency_conversion(
+                                value, currency, to_currency, datetime.datetime.strptime(date_str, DATE_FORMAT))
+                        else:
+                            total_values[index]['value'] += value
+
+        print("get_total_values_monthly", json.dumps(total_values, indent=2))

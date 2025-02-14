@@ -2,6 +2,7 @@
 {% load static %}
 {% block content %}
 <div class="row">
+    {% if menues %}
     {% for menu in menues %}
     <div class="col-sm-12 col-md-3 pt-4 d-flex align-items-stretch">
         {% with html="components/action_card.html" %}
@@ -9,5 +10,8 @@
         {% endwith %}
     </div>
     {% endfor %}
+    {% else %}
+    <h3 class="p-4" style="color: red;">No Watchers found !!!</h3>
+    {% endif %}
 </div>
 {% endblock %}
