@@ -65,5 +65,5 @@ class WatchersFin:
                 # Move to the next month
                 current_date = first_day_of_next_month(current_date)
 
-        print("get_statements_values", json.dumps(statements_list, indent=2))
+        # print("get_statements_values", json.dumps(statements_list, indent=2))
         return statements_list

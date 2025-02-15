@@ -1,3 +1,4 @@
+from datetime import timedelta
 from django.db import models
 from django.contrib.auth.models import User  # For linking Watcher to a user
 # Import the function for the current time
@@ -51,8 +52,9 @@ class Watcher(models.Model):
             events = list(self.events.all().order_by('-date'))
         if len(events) > 0 and self.type in INVESTMENT_WATCHER_TYPES:
             # Add a statement event with 0 value as the first event
+            date = events[len(events)-1].date - timedelta(days=32)
             events.append(Event(
-                description="Initial Statement", date=events[len(events)-1].date, parent=self, type=STATEMENT_EVENT_TYPE, value=0))
+                description="Initial Statement", date=date, parent=self, type=STATEMENT_EVENT_TYPE, value=0))
         return events
 
     def to_dict(self):

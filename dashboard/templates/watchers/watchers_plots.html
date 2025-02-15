@@ -51,7 +51,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         let currencies = ["USD", "NIS", "EUR"];
-        let max_timeout = 2000
+        let max_timeout = 1000
         for (let currency of currencies) {
             setTimeout(() => {
                 fetchWatchersPlotsData(currency, "Statement", on_done);
@@ -84,7 +84,7 @@
             title = currency + " " + get_profit(data);
         }
         if (event_type == "Distribution") {
-            title+= " (per Quarter)"
+            //title += " (per Quarter)"
         }
         console.log("generate_plot", event_type, currency, title)
         console.log(data)

@@ -47,10 +47,10 @@ def get_monthly_values(events, currency, carrying_forward=True):
 
             event_value = 0
             for event in events:
-                if event.date.year == year and event.date.month == month:
+                if event.date.month == month and event.date.year == year:
                     if event.type == STATEMENT_EVENT_TYPE:
-                        if float(event.value) > event_value:
-                            event_value = float(event.value)
+                        # if float(event.value) > event_value:
+                        event_value = float(event.value)
                     else:
                         event_value += float(event.value)
 

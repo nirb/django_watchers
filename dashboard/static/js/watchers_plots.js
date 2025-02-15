@@ -4,33 +4,37 @@ function fetchWatchersPlotsData(currency, events_type, on_done) {
         .then(data => {
             //console.log(currency, data);
             if (events_type !== "Statement") {
-                if (currency === "USD") {
-                    //    console.log("fetchWatchersPlotsData", events_type, currency, data);
-                }
+                // if (currency === "USD") {
+                //     console.log("fetchWatchersPlotsData", data);
+                // }
                 // calculate per quarter
                 let quarterlyData = data.reduce((acc, item) => {
                     let date = new Date(item.date);
                     let quarter = Math.floor(date.getMonth() / 3) + 1;
-                    let year = date.getFullYear();
-                    let key = `${year}-Q${quarter}`;
+                    let year = date.getFullYear().toString().slice(-2);
+                    let key = `Q${quarter}-${year}`;
 
                     if (!acc[key]) {
-                        acc[key] = { date: new Date(year, (quarter - 1) * 3, 1), value: 0 };
+                        acc[key] = { date: new Date(year, quarter * 3, 1), value: 0 };
                     }
                     acc[key].value += item.value;
 
                     return acc;
                 }, {});
 
-                let result = Object.values(quarterlyData).map(item => {
-                    item.date = item.date.toISOString().split('T')[0];
-                    return item;
-                });
+                // if (currency === "USD") {
+                //     console.log("fetchWatchersPlotsData", quarterlyData);
+                // }
+
+                let result = [];
+                for (let key in quarterlyData) {
+                    result.push({ "date": key, "value": quarterlyData[key].value });
+                }
 
                 data = result;
-                if (currency === "USD") {
-                    //  console.log("fetchWatchersPlotsData", data);
-                }
+                // if (currency === "USD") {
+                //     console.log("fetchWatchersPlotsData", result);
+                // }
             }
             on_done(data, currency, events_type);
         });
