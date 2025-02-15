@@ -5,7 +5,7 @@ from core.defs import *
 import datetime
 import json
 
-from dashboard.models import Event, Watcher
+from dashboard.models import Advisor, Event, Watcher
 
 
 def currency_converter(currency, obj_list):
@@ -32,7 +32,7 @@ def currency_to_name(currency):
     return currency_converter(currency, CURRENCY_NAMES)
 
 
-def int_to_str(value, currency=None):
+def int_to_str(value, currency=None, show_k=True):
     # print("int_to_str", value, type(value))
     if isinstance(value, str):
         try:
@@ -43,7 +43,7 @@ def int_to_str(value, currency=None):
     if currency:
         show_currency = currency_to_symbol_or_type(currency)
     k_sign = ""
-    if abs(value) >= 100000:
+    if abs(value) >= 100000 and show_k:
         value = value/1000
         k_sign = "K"
     if int(value) >= 0:
@@ -405,8 +405,14 @@ class AppJSONEncoder(json.JSONEncoder):
                 "type": obj.type,
                 "user": obj.user.username,
             }
-        elif isinstance(obj, Decimal):  # Convert Decimal to float
+        if isinstance(obj, Advisor):  # Handle Advisor objects
+            return {
+                "name": obj.name,
+                "phone": obj.phone,
+                "mail": obj.mail,
+            }
+        if isinstance(obj, Decimal):  # Convert Decimal to float
             return float(obj)
-        elif isinstance(obj, datetime.date):  # Convert date to string
+        if isinstance(obj, datetime.date):  # Convert date to string
             return obj.strftime("%Y-%m-%d")
         return super().default(obj)  # Use default behavior for other types

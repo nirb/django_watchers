@@ -1,27 +1,117 @@
 {% extends "base.html" %}
-{% load static %}
 {% load custom_filters %}
 {% block content %}
-<div class="container px-0 pt-4">
-    <div class="row row-cols-sm-1 row-cols-lg-2 gx-8">
-        <div class="col mb-4">
+<button class="btn btn-primary" id="more_btn" onclick="saveAsPDF()">Generate Report</button>
+<div class="container px-0 pt-2" id="view_to_print">
+    <center>
+        <h2 class="app-text-color">Assets In Currencies</h2>
+    </center>
+    <div class="row row-cols-sm-1 row-cols-lg-1 gx-4">
+
+        <div class="col mb-12">
             <div class="p-2 border border-primary border-4 rounded bg-light">
-                {% with title="Total assets in each currency" list=assets_in_currencies %}
+                {% with list=assets_in_currencies %}
                 {% include "reports/report_ul.html" %}
                 {% endwith %}
             </div>
         </div>
-        <div class="col mb-4">
+        <!-- <div class="col mb-6">
             <div class="p-2 border border-primary border-4 rounded bg-light">
                 {% with title="Total sum of assets converted in each currency" list=currrencies_sum %}
                 {% include "reports/report_ul.html" %}
                 {% endwith %}
             </div>
+        </div> -->
+    </div>
+    <div>
+        <center>
+            <h2 class="app-text-color">Advisors</h2>
+        </center>
+        <div class="row row-cols-sm-1 gx-4">
+            <div class="col mb-12">
+                <div class="p-2 border border-primary border-4 rounded bg-light">
+                    {% for advisor in advisors %}
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-4">
+                                <h4>{{ advisor.name }}</h4>
+                            </div>
+                            <div class="col-4">
+                                <h4>{{ advisor.phone }}</h4>
+                            </div>
+                            <div class="col-4">
+                                <h4>{{ advisor.mail }}</h4>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
-</div>
-<script>
-    let x =
-        console.log('assets_in_currencies', "{{ assets_in_currencies }}");
-</script>
-{% endblock %}
+    <div>
+        {% for watcher_by_currency in watchers_by_currency %}
+        <div style="page-break-before: always;"></div>
+        <center>
+            <h2 class="app-text-color">{{ watcher_by_currency.currency }} Watchers</h2>
+        </center>
+        <div class="row row-cols-sm-1 gx-4">
+            <div class="col mb-12">
+                <div class="p-2 border border-primary border-4 rounded bg-light">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-1">
+                                    <h4>#</h4>
+                                </div>
+                                <div class="col-5">
+                                    <h4>Name</h4>
+                                </div>
+                                <div class="col-2">
+                                    <h4>Value</h4>
+                                </div>
+                                <div class="col-2">
+                                    <h4>Unfunded</h4>
+                                </div>
+                                <div class="col-2">
+                                    <h4>Advisor</h4>
+                                </div>
+                            </div>
+                        </li>
+                        {% for w in watcher_by_currency.watchers %}
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-1">
+                                    <h4>{{ forloop.counter }}</h4>
+                                </div>
+                                <div class="col-5">
+                                    <h4>{{ w.name }}</h4>
+                                </div>
+                                <div class="col-2">
+                                    <h4>{{ w.value }}</h4>
+                                </div>
+                                <div class="col-2">
+                                    <h4>{{ w.unfunded }}</h4>
+                                </div>
+                                <div class="col-2">
+                                    <h4>{{ w.advisor }}</h4>
+                                </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <script>
+        function saveAsPDF() {
+            var printContents = document.getElementById('view_to_print').innerHTML;
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+        }
+    </script>
+    {% endblock %}

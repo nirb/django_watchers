@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from core.defs import *
 from core.watchers_fin import WatchersFin
 from core.watchers_info import WatchersInfo
-from dashboard.models import Watcher
+from dashboard.models import Advisor, Watcher
 from dashboard.views.tasks import get_tasks_cards, get_tasks_summary_card, get_task_watchers
 from utils.cache import clear_cache_if_needed
 from django.contrib import messages
@@ -49,10 +49,15 @@ def report(request):
             assets_in_currencies.append(
                 [currency, watchersFin.currency_values[currency], watchersFin.currency_distribution[currency]])
 
-        context = {"summary_card": get_watchers_summary_card(),
-                   "currency_cards": get_currency_cards(),
-                   "currrencies_sum": currrencies_sum,
-                   "assets_in_currencies": assets_in_currencies}
+        watchers_by_currency = [{"currency": currency, "watchers": watchersInfo.get_watchers_for_report(
+            request.user.id, currency)} for currency in CURRENCY_TYPES]
+        context = {
+            "currrencies_sum": currrencies_sum,
+            "assets_in_currencies": assets_in_currencies,
+            "watchers_by_currency": watchers_by_currency,
+            "advisors":  Advisor.objects.all()}
+
+        # print("report", json.dumps(context, cls=AppJSONEncoder, indent=2))
 
         return render(request, 'reports/report_.html', context)
 

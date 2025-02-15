@@ -160,3 +160,18 @@ class WatchersInfo:
                     formatted_value = int_to_str(value, currency)
                     formatted_data[currency][year][month] = formatted_value
         return formatted_data
+
+    def get_watchers_for_report(self, user_id, currency):
+        watchers = watchersFin.get_watchers(user_id).filter(currency=currency)
+        watchers_list = []
+        for watcher in watchers:
+            if watcher.type in INVESTMENT_WATCHER_TYPES:
+                watchers_list.append({
+                    "name": watcher.name,
+                    "advisor": watcher.advisor.name,
+                    "value": int_to_str(watchersFin.get_watcher_info(watcher.id)[VALUE], watcher.currency, show_k=False),
+                    "unfunded": int_to_str(watchersFin.get_watcher_info(watcher.id)[UNFUNDED], watcher.currency, show_k=False),
+                })
+
+        return watchers_list
+#
