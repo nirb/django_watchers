@@ -47,7 +47,8 @@ class WatchersFin:
 
         self.watchers = Watcher.objects.filter(user_id=user_id).order_by(
             NAME).order_by(CURRENCY)
-        self.get_total_values_monthly(user_id, "NIS")
+        # self.get_total_values_monthly(user_id, "NIS")
+        # self.get_total_values_monthly(user_id, "NIS", DISTRIBUTION_EVENT_TYPE)
 
         self.calculate_currency_sum()
         self.convert_sum_values_to_str()
@@ -79,7 +80,7 @@ class WatchersFin:
         # set watcher fin_info, calculate the total values for all watchers
         for watcher in self.watchers:
             if watcher.type in INVESTMENT_WATCHER_TYPES:
-                #print("calculate_currency_sum", watcher.name)
+                # print("calculate_currency_sum", watcher.name)
                 fin_info = calculate_investment_info(watcher.get_events())
                 fin_info[UNFUNDED_CURRENCY] = int_to_str(
                     fin_info[UNFUNDED], watcher.currency)
@@ -140,6 +141,9 @@ class WatchersFin:
         return None
 
     def get_watchers_sum_currency_per_month(self, user_id, currency, events_type):
+        if "Total_in_" in currency:
+            currency = currency.split("_")[-1]
+            return self.get_total_values_monthly(user_id, currency, events_type)
         watchers = self.get_watchers(user_id).filter(currency=currency)
         return self.get_watchers_sum_per_month(watchers, currency, events_type)
 
@@ -168,7 +172,7 @@ class WatchersFin:
         sorted_sum = dict(sorted(total_sum_per_month.items()))
         return [{"date": date_str, "value": value} for date_str, value in sorted_sum.items()]
 
-    def get_total_values_monthly(self, user_id, to_currency="USD"):
+    def get_total_values_monthly(self, user_id, to_currency="USD", events_type=STATEMENT_EVENT_TYPE):
         total_values = None
 
         # put the to_currency in the first place
@@ -177,13 +181,10 @@ class WatchersFin:
 
         for currency in currencies:
             sum_per_month = self.get_watchers_sum_per_month(
-                self.get_watchers(user_id).filter(currency=currency), currency, STATEMENT_EVENT_TYPE)
+                self.get_watchers(user_id).filter(currency=currency), currency, events_type)
             if total_values is None:
                 total_values = sum_per_month
                 continue
-
-            if currency == "NIS":
-                print("x")
 
             for item in sum_per_month:
                 date_str = item['date']
@@ -198,4 +199,5 @@ class WatchersFin:
                         else:
                             total_values[index]['value'] += value
 
-        print("get_total_values_monthly", json.dumps(total_values, indent=2))
+        # print("get_total_values_monthly", json.dumps(total_values, indent=2))
+        return total_values
