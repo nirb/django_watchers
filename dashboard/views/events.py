@@ -312,7 +312,7 @@ def events_cards(request, order_by='-date'):
     if unfunded_ids is not None:
         menues = [{"title": event.parent.name, "url": f"/watcher/{event.parent.id}",
                    "background": event_type_to_color(event.type),
-                   "items": [f"Value: {int_to_str(event.value, event.parent.currency)}", f"Unfunded: {watchersFin.get_watcher_info(event.parent.id)[UNFUNDED_CURRENCY]}"]}
+                   "items": [f"Value: {int_to_str(event.value, event.parent.currency)}", f"Unfunded: {watchersFin.get_watcher_info(event.parent.id)[UNFUNDED_STR]}"]}
                   for event in events]
     else:
         menues = [{"title": event.parent.name, "url": f"/watcher/{event.parent.id}",

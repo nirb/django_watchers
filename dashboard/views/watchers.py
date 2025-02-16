@@ -1,3 +1,4 @@
+import copy
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -99,10 +100,10 @@ def watcher_view(request, watcher_id):
 
     if request.method == "GET":
         watcher = watchersFin.get_watcher(request.user.id, int(watcher_id))
-        watcher_info = watchersFin.get_watcher_info(watcher.id)
+        watcher_info = copy.deepcopy(watchersFin.get_watcher_info(watcher.id))
         if watcher_info:
             watcher_info = json_keys_to_string_values(
-                watcher_info, [VALUE, INVESTED, NET_GAIN, COMMITMENT, UNFUNDED, DIST_ITD, DIST_YTD], watcher.currency)
+                watcher_info, [VALUE, INVESTED, NET_GAIN, COMMITMENT, DIST_ITD, DIST_YTD], watcher.currency)
             watcher_info[EVENTS] = list_keys_to_string_values(
                 watcher_info[EVENTS], [VALUE], watcher.currency)
             event_cards = [{"type": event.type, "url": f"/events/edit/{event.id}",

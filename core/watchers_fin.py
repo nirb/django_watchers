@@ -38,7 +38,7 @@ class WatchersFin:
         self.fin_info = {}
         for currency in CURRENCY_TYPES:
             self.currency_sum[currency] = {
-                f"{VALUE_NUM}": 0, f"{INVESTED_NUM}": 0, f"{UNFUNDED_NUM}": 0, "sum": 0}
+                f"{VALUE_NUM}": 0, f"{INVESTED_NUM}": 0, f"{UNFUNDED}": 0, "sum": 0}
 
     @debug_func
     def calculate_summary(self, user_id):
@@ -68,7 +68,7 @@ class WatchersFin:
             total_assets_in_currencies[c], c) for c in CURRENCY_TYPES}
 
         self.currency_unfunded = {
-            c: self.currency_sum[c][UNFUNDED] for c in CURRENCY_TYPES
+            c: self.currency_sum[c][UNFUNDED_STR] for c in CURRENCY_TYPES
         }
 
         if total_assets_in_currencies["USD"] > 0:
@@ -82,7 +82,7 @@ class WatchersFin:
             if watcher.type in INVESTMENT_WATCHER_TYPES:
                 # print("calculate_currency_sum", watcher.name)
                 fin_info = calculate_investment_info(watcher.get_events())
-                fin_info[UNFUNDED_CURRENCY] = int_to_str(
+                fin_info[UNFUNDED_STR] = int_to_str(
                     fin_info[UNFUNDED], watcher.currency)
                 fin_info[COMMITMENT_CURRENCY] = int_to_str(
                     fin_info[COMMITMENT], watcher.currency)
@@ -91,12 +91,13 @@ class WatchersFin:
                 if fin_info:
                     self.currency_sum[f"{watcher.currency}"][VALUE_NUM] += fin_info[VALUE]
                     self.currency_sum[f"{watcher.currency}"][INVESTED_NUM] += fin_info[INVESTED]
-                    self.currency_sum[f"{watcher.currency}"][UNFUNDED_NUM] += fin_info[UNFUNDED]
+                    self.currency_sum[f"{watcher.currency}"][UNFUNDED] += fin_info[UNFUNDED]
                 else:
                     d_print("watcher with no events, fin_info is None",
                             watcher.name)
             else:
                 d_print("watcher type not in INVESTMENT_WATCHER_TYPES")
+        # print("calculate_currency_sum", json.dumps(self.fin_info, cl, indent=2))
 
     @debug_func
     def convert_sum_values_to_str(self):
@@ -106,8 +107,8 @@ class WatchersFin:
                 self.currency_sum[currency][VALUE_NUM], currency)
             self.currency_sum[currency][INVESTED] = int_to_str(
                 self.currency_sum[currency][INVESTED_NUM], currency)
-            self.currency_sum[currency][UNFUNDED] = int_to_str(
-                self.currency_sum[currency][UNFUNDED_NUM], currency)
+            self.currency_sum[currency][UNFUNDED_STR] = int_to_str(
+                self.currency_sum[currency][UNFUNDED], currency)
 
     @debug_func
     def calculate_total_assets_in_currencies(self):
@@ -121,7 +122,10 @@ class WatchersFin:
         return total_assets_in_currencies
 
     def get_watcher_info(self, watcher_id):
-        return self.fin_info.get(f"{watcher_id}", None)
+        info = self.fin_info.get(f"{watcher_id}", None)
+        # if info and (watcher_id == 13 or isinstance(info[UNFUNDED], str)):
+        #    print('here')
+        return info
 
     def get_watchers(self, user_id):
         if self.watchers is None:

@@ -1,6 +1,6 @@
 from datetime import datetime
 from core.defs import *
-from utils.converters import to_percent
+from utils.converters import int_to_str, to_percent
 from utils.debug import print_debug
 from scipy.optimize import newton
 import numpy_financial as npf
