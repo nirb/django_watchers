@@ -1,18 +1,16 @@
 let watchers = []
+let reloadTimer = null;
 
 function searchResults(searchStr) {
     const searchResults = document.getElementById('searchResults');
-
-    // first put the spinner
-    let reloadTimer;
-
+    console.log("searchResults", reloadTimer)
+    clearTimeout(reloadTimer);
     if (searchStr === "") {
         searchResults.innerHTML = '<div><div class="spinner-border text-primary text-center" role="status"></div><div>Waiting for input</div></div>'
         reloadTimer = setTimeout(() => {
             window.location.reload()
         }, 4000);
     } else {
-        clearTimeout(reloadTimer);
         let content = '<h3 class="app_main_color">Search Results</h3>';
         watchers.forEach(watcher => {
             if (watcher.name.toLowerCase().includes(searchStr.toLowerCase()) ||
@@ -29,7 +27,7 @@ function searchResults(searchStr) {
 
 function get_watchers() {
     const watchersList = document.getElementById('watchersListOptions');
-    console.log("get_watchers...")
+    //console.log("get_watchers...")
     fetch("/search_watchers/__all__!")
         .then(response => response.json())
         .then(data => {
@@ -42,10 +40,9 @@ function get_watchers() {
                     content += `<option value="${name}">${name}</option>`;
                     watchers.push(item)
                 });
-                console.log("get_watchers", watchers)
+                //console.log("get_watchers", watchers)
                 watchersList.innerHTML = content;
             }
         })
         .catch(error => console.error('Error:', error));
-
 }
