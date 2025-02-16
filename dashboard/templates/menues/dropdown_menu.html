@@ -1,16 +1,15 @@
-<ul class="dropdown-menu">
-    <a class="dropdown-item" href="/events_cards/date?type=notice">Pending Events</a>
-    <a class="dropdown-item" href="/events_cards/-date">Recent Events</a>
-    <a class="dropdown-item" href="/events_cards/-date?type=missing">Missing watchers</a>
-    <a class="dropdown-item" href="/events_cards/-date?type=unfunded">Unfunded Watchers</a>
-    <a class="dropdown-item" href="/create_watcher_form">Add Watcher</a>
-    <a class="dropdown-item" href="/create_event_form">Add Event</a>
-    <a class="dropdown-item" href="/monthly_report">Report</a>
-    <li>
-        <hr class="dropdown-divider">
-    </li>
-    <button class="dropdown-item" id="install-button" style="color:green; font-weight: bold;">
+<ul class="dropdown-menu btn-primary" style="border-radius: 8px;">
+    <a class="dropdown-item app-text-color" href="/events_cards/date?type=notice">Pending Events</a>
+    <a class="dropdown-item app-text-color" href="/events_cards/-date">Recent Events</a>
+    <a class="dropdown-item app-text-color" href="/events_cards/-date?type=missing">Missing watchers</a>
+    <a class="dropdown-item app-text-color" href="/events_cards/-date?type=unfunded">Unfunded Watchers</a>
+    <a class="dropdown-item app-text-color" href="/create_watcher_form">Add Watcher</a>
+    <a class="dropdown-item app-text-color" href="/create_event_form">Add Event</a>
+    <a class="dropdown-item app-text-color" href="/monthly_report">Report</a>
+    <hr class="dropdown-divider">
+    <button class="dropdown-item app-text-color" id="install-button">
         Install App - Recomended
     </button>
-    <a class="dropdown-item" href="{% url 'logout' %}">Logout ({{ user.username }})</a>
+    <hr class="dropdown-divider">
+    <a class="dropdown-item app-text-color" href="{% url 'logout' %}">Logout ({{ user.username }})</a>
 </ul>
