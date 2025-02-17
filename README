@@ -20,6 +20,7 @@ python3 manage.py runserver 8153
 
 
 # TODO 
+# sort events cards by types
 # finish report
 # support multitanent
 # on the watcher page - show pending on top

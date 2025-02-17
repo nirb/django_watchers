@@ -106,10 +106,10 @@ def watcher_view(request, watcher_id):
                 watcher_info, [VALUE, INVESTED, NET_GAIN, COMMITMENT, DIST_ITD, DIST_YTD], watcher.currency)
             watcher_info[EVENTS] = list_keys_to_string_values(
                 watcher_info[EVENTS], [VALUE], watcher.currency)
-            event_cards = [{"type": event.type, "url": f"/events/edit/{event.id}",
-                            "background": event_type_to_color(event.type),
-                            "items": [event.date,  int_to_str(event.value, event.parent.currency)]}
-                           for event in watcher_info[EVENTS]]
+            event_cards = sorted([{"type": event.type, "url": f"/events/edit/{event.id}",
+                                   "background": event_type_to_color(event.type),
+                                   "items": [event.date, int_to_str(event.value, event.parent.currency)]}
+                                  for event in watcher_info[EVENTS]], key=lambda x: INVESTMENT_EVENT_TYPES.index(x["type"]))
             context = {"name": watcher.name,
                        "watcher_info": watcher_info,
                        "watcher": watcher,

@@ -312,14 +312,16 @@ def events_cards(request, order_by='-date'):
     if unfunded_ids is not None:
         menues = [{"title": event.parent.name, "url": f"/watcher/{event.parent.id}",
                    "background": event_type_to_color(event.type),
+                   "event_type": event.type,
                    "items": [f"Value: {int_to_str(event.value, event.parent.currency)}", f"Unfunded: {watchersFin.get_watcher_info(event.parent.id)[UNFUNDED_STR]}"]}
                   for event in events]
     else:
         menues = [{"title": event.parent.name, "url": f"/watcher/{event.parent.id}",
                    "background": event_type_to_color(event.type),
+                   "event_type": event.type,
                    "items": [event.date, event.type, int_to_str(event.value, event.parent.currency)]}
-                  for event in events]
-    return render(request, 'menues/cards_menu.html', {"menues": menues, "page_name": page_name})
+                  for event in sorted(events, key=lambda e: e.type)]
+    return render(request, 'menues/cards_menu.html', {"menues": menues, "page_name": page_name, "show_tabs": True if unfunded_ids is None else False})
 
 
 def delete_event(request, event_id):

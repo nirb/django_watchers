@@ -1,22 +1,82 @@
 {% load custom_filters %}
-<div class="row text-center">
-    <h3 class="app-text-color">Events</h3>
-</div>
+
 <div class="row">
     {% if missing_events %}
     <div style="color:red">Missing Events - {{missing_events}}</div>
     {% endif %}
 </div>
 <div class="row" id="eventCards">
-    {% for e in event_cards %}
-    <div class="col-sm-6 col-md-4 pt-2 d-flex align-items-stretch">
-        {% with html="components/action_card.html" %}
-        {% with bg=e.background %}
-        {% include html with title=e.type items=e.items url=e.url bg=bg %}
-        {% endwith %}
-        {% endwith %}
+    <div class="row p-0 m-0">
+        <ul class="col-4 nav nav-tabs px-3" id="eventTabs" role="tablist" style="border-bottom: none;">
+            <li class="nav-item">
+                <a class="nav-link active" id="all-tab" data-toggle="tab" href="#all" role="tab" aria-controls="all"
+                    aria-selected="true">All</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="distribution-tab" data-toggle="tab" href="#distributionx" role="tab"
+                    aria-controls="distribution" aria-selected="false">Distribution</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="statement-tab" data-toggle="tab" href="#statementx" role="tab"
+                    aria-controls="statement" aria-selected="false">Statement</a>
+            </li>
+        </ul>
+        <div class="col-4 text-center">
+            <h3 class="app-text-color">Events</h3>
+        </div>
+        <div class="col-4">
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-primary" id="showTableButton" onclick="showTable()">
+                    Show Events in Table
+                </button>
+            </div>
+        </div>
     </div>
-    {% endfor %}
+    <div class="tab-content" id="eventTabsContent">
+        <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+            <div class="row">
+                {% for e in event_cards %}
+                <div class="col-sm-6 col-md-4 pt-2 d-flex align-items-stretch">
+                    {% with html="components/action_card.html" %}
+                    {% with bg=e.background %}
+                    {% include html with title=e.type items=e.items url=e.url bg=bg %}
+                    {% endwith %}
+                    {% endwith %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="tab-pane fade" id="distributionx" role="tabpanel" aria-labelledby="distribution-tab">
+            <div class="row">
+                {% for e in event_cards %}
+                {% if e.type == "Distribution" %}
+                <div class="col-sm-6 col-md-4 pt-2 d-flex align-items-stretch">
+                    {% with html="components/action_card.html" %}
+                    {% with bg=e.background %}
+                    {% include html with title=e.type items=e.items url=e.url bg=bg %}
+                    {% endwith %}
+                    {% endwith %}
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="tab-pane fade" id="statementx" role="tabpanel" aria-labelledby="statement-tab">
+            <div class="row">
+                {% for e in event_cards %}
+                {% if e.type == "Statement" %}
+                <div class="col-sm-6 col-md-4 pt-2 d-flex align-items-stretch">
+                    {% with html="components/action_card.html" %}
+                    {% with bg=e.background %}
+                    {% include html with title=e.type items=e.items url=e.url bg=bg %}
+                    {% endwith %}
+                    {% endwith %}
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 </div>
 <div class="table-container mt-4">
     <table class="table table-striped table-bordered">
@@ -57,10 +117,6 @@
         </tbody>
     </table>
 </div>
-
-<button class="btn btn-primary mt-4" id="showTableButton" class="btn btn-primary" onclick="showTable()">
-    Show Events in Table
-</button>
 
 <script>
     function showTable() {

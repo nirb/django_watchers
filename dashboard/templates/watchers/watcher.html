@@ -6,27 +6,25 @@
 <h3 style="color: red;">{{error}}</h3>
 {% else %}
 <div>
-    <!-- <center class="mb-2">
-        <h3 class="app-text-color" style="display: inline; font-style: italic;">
-            {{name}}
-        </h3>
-    </center> -->
-    <div class="app-data-item p-2">
-        <span class="data-value highlight" style="font-size: large;">Value -
-            {{watcher_info.value}}</span>
-    </div>
-    <div class="app-card">
-        {% include "watchers/watcher_fin_info.html" %}
-    </div>
-    <div class="hstack justify-content-around">
-        <div>
+    <div class="row px-2 pt-4">
+        <div class="col-sm-12 col-md-3">
             <a href="/create_event_form/{{name}}" class="btn btn-primary">
                 <span>Add event</span>
             </a>
         </div>
-        <div class="app-text-color">
+        <div class="col-sm-12 col-md-6 app-data-item p-2">
+            <span class="data-value highlight" style="font-size: large;">Value -
+                {{watcher_info.value}}</span>
+        </div>
+        <div class="col-sm-12 col-md-3 d-flex align-items-center justify-content-end app-text-color">
             <h6>Advisor - {{watcher.advisor.name}}</h6>
         </div>
+    </div>
+    <div class="app-card">
+        {% include "watchers/watcher_fin_info.html" %}
+    </div>
+    <div class="app-card">
+        {% include "events/events.html" %}
     </div>
     <div class="app-card">
         <div id="Statement" style="min-height: 300px;"></div>
@@ -39,9 +37,6 @@
         {% endwith %}
         {% endwith %}
         {% endwith %}
-    </div>
-    <div class="app-card">
-        {% include "events/events.html" %}
     </div>
 </div>
 <script>
