@@ -188,6 +188,7 @@ def create_event_form(request, watcher_name=None):
                   {'form': form, 'event_type': event_type, "cancel_url": request.META.get('HTTP_REFERER', '/')})
 
 
+@login_required
 def events_table_view(request, watcher_id):
     # Query all events ordered by date
     watcher = get_object_or_404(Watcher, id=watcher_id)
@@ -220,6 +221,7 @@ def events_table_view(request, watcher_id):
                                                         "currency": watcher.currency})
 
 
+@login_required
 def edit_event(request, event_id):
     if request.method == 'GET':
         print("edit", event_id)
@@ -244,6 +246,7 @@ def edit_event(request, event_id):
             return redirect("/watcher/" + str(event.parent.id) + "/")
 
 
+@login_required
 def get_missing_events_ids(request, days=120):
     events_id = []
     for watcher in Watcher.objects.filter(user=request.user):
@@ -264,6 +267,7 @@ def get_missing_events_ids(request, days=120):
     return events_id
 
 
+@login_required
 def get_unfunded_watcher_events(request):
     unfunded_watcher_events_ids = []
     for watcher in Watcher.objects.filter(user=request.user):
@@ -282,6 +286,7 @@ def get_unfunded_watcher_events(request):
     return unfunded_watcher_events_ids
 
 
+@login_required
 def events_cards(request, order_by='-date'):
     query_params = request.GET.dict()
     print(f"events_cards query_params: {query_params=} {order_by=}")
@@ -324,6 +329,7 @@ def events_cards(request, order_by='-date'):
     return render(request, 'menues/cards_menu.html', {"menues": menues, "page_name": page_name, "show_tabs": True if unfunded_ids is None else False})
 
 
+@login_required
 def delete_event(request, event_id):
     if request.method == 'POST':
         event = get_object_or_404(Event, id=event_id)

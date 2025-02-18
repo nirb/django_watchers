@@ -1,4 +1,5 @@
 import copy
+from datetime import timedelta, timezone, datetime
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -25,11 +26,13 @@ wF = wf()
 @login_required
 def dashboard_view(request):
     clear_cache_if_needed()
+    watchersFin.calculate_summary(request.user.id)
+
     wF.get_statements_values("USD", 12)
     if request.method == "GET":
-        watchersFin.calculate_summary(request.user.id)
-        context = {"summary_card": get_watchers_summary_card(),
-                   "currency_cards": get_currency_cards(),
+        currency_cards = get_currency_cards()
+        context = {"summary_card": get_watchers_summary_card(request.user.id),
+                   "currency_cards": currency_cards,
                    "tasks": get_tasks_summary_card(request.user.id)}
         print("dashboard_view", json.dumps(
             context, cls=AppJSONEncoder, indent=2))
@@ -170,6 +173,7 @@ def watcher_form(request):
     return render(request, "watchers/create_watcher.html", {"form": form})
 
 
+@login_required
 def select_watcher(request):
     if request.method == "POST":
         existing_watcher_name = request.POST.get("existing_watcher")
@@ -185,6 +189,7 @@ def select_watcher(request):
     return redirect("/create_event/")
 
 
+@login_required
 def delete_watcher(request, watcher_id):
     # Ensure the user is authorized to delete (add your own authorization check if needed)
     watcher = get_object_or_404(Watcher, id=watcher_id)
@@ -204,6 +209,7 @@ def delete_watcher(request, watcher_id):
     return redirect('/watchers/')
 
 
+@login_required
 def search_watchers(request, search_string=""):
     if request.method == 'GET':
         ret = []
@@ -223,7 +229,7 @@ def search_watchers(request, search_string=""):
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 
-def get_watchers_summary_card():
+def get_watchers_summary_card(request=None):
     items = []
     for currency in CURRENCY_TYPES:
         items.append({'text_left': currency,
@@ -255,6 +261,7 @@ def get_currency_card(currency):
                       ]}
 
 
+@login_required
 def watchers_plots_data(request):
     currency = request.GET.get('currency', None)
     event_type = request.GET.get('events_type', None)
@@ -264,10 +271,34 @@ def watchers_plots_data(request):
     return JsonResponse(ret, safe=False)
 
 
+@login_required
 def watcher_plots_data(request):
     watcher_id = request.GET.get('watcher_id', None)
     event_type = request.GET.get('events_type', None)
     ret = watchersFin.get_watcher_sum_per_month(
         request.user.id, watcher_id, event_type)
 
+    return JsonResponse(ret, safe=False)
+
+
+@login_required
+def anomalous_watchers_view(request):
+    return render(request, "watchers/anomalous_watchers.html", {})
+
+
+@login_required
+def get_anomalous_watchers(request):
+    ret = []
+    # watchers that had specific event type was not found in the last 3 months
+    watchers = Watcher.objects.filter(user=request.user)
+    for watcher in watchers:
+        for event_type in [STATEMENT_EVENT_TYPE, DISTRIBUTION_EVENT_TYPE]:
+            events = watcher.events.filter(type=event_type)
+            if events:
+                last_event = events.order_by('-date').first()
+                if last_event.date < (datetime.now(timezone.utc) - timedelta(days=90)).date():
+                    ret.append(
+                        {"watcher": watcher.name, 'watcher_id': watcher.id, "event_type": event_type, "last_date": str(last_event.date)})
+    ret.sort(key=lambda x: x["last_date"], reverse=False)
+    print("anomalous", json.dumps(ret, indent=2))
     return JsonResponse(ret, safe=False)
