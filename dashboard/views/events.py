@@ -1,4 +1,5 @@
 import json
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from core.watchers_fin import WatchersFin
@@ -15,7 +16,7 @@ from core.defs import *
 from django.contrib import messages
 from django.core.cache import cache
 from django.db.models import F
-import datetime
+from datetime import datetime, timezone, timedelta
 
 watchersInfo = WatchersInfo()
 watchersFin = WatchersFin()
@@ -247,27 +248,6 @@ def edit_event(request, event_id):
 
 
 @login_required
-def get_missing_events_ids(request, days=120):
-    events_id = []
-    for watcher in Watcher.objects.filter(user=request.user):
-        if Event.objects.filter(parent=watcher).exists():
-            last_event = Event.objects.filter(
-                parent=watcher).latest('date')
-            print(
-                f"last_event: {type(last_event.date)} {type(datetime.datetime.now().date())} {last_event.date=}")
-            # convet last_event.date to days since 1970
-            days_from_now = (datetime.datetime.now().date() -
-                             datetime.datetime(1970, 1, 1).date()).days
-            days_from_last_event = (last_event.date -
-                                    datetime.datetime(1970, 1, 1).date()).days
-            print(f"diff: {days_from_now-days_from_last_event}")
-            if days_from_now-days_from_last_event > days:
-                events_id.append(last_event.id)
-
-    return events_id
-
-
-@login_required
 def get_unfunded_watcher_events(request):
     unfunded_watcher_events_ids = []
     for watcher in Watcher.objects.filter(user=request.user):
@@ -298,10 +278,10 @@ def events_cards(request, order_by='-date'):
     unfunded_ids = None
     if TYPE in query_params:
         if query_params[TYPE] == MISSING:
-            # get events that are missing for more than 120 days
-            events = events.filter(id__in=get_missing_events_ids(request, 120))
-            page_name = "Missing Events"
-        if query_params[TYPE] == UNFUNDED:
+            page_name = f"Missing Events"
+            events = get_missing_events(request)
+            # return render(request, "events/missing_events.html", {})
+        elif query_params[TYPE] == UNFUNDED:
             unfunded_ids = get_unfunded_watcher_events(request)
             events = events.filter(id__in=unfunded_ids)
             events = sorted(events, key=lambda e: int(watchersFin.get_watcher_info(
@@ -314,12 +294,18 @@ def events_cards(request, order_by='-date'):
     if not isinstance(events, list):
         events = events.order_by(order_by)[:100]
 
-    if unfunded_ids is not None:
+    if query_params[TYPE] == UNFUNDED:
         menues = [{"title": event.parent.name, "url": f"/watcher/{event.parent.id}",
                    "background": event_type_to_color(event.type),
                    "event_type": event.type,
                    "items": [f"Value: {int_to_str(event.value, event.parent.currency)}", f"Unfunded: {watchersFin.get_watcher_info(event.parent.id)[UNFUNDED_STR]}"]}
                   for event in events]
+    elif query_params[TYPE] == MISSING:
+        menues = [{"title": event.parent.name, "url": f"/watcher/{event.parent.id}",
+                  "background": event_type_to_color(event.type),
+                   "event_type": event.type,
+                   "items": [f'Last Update: {event.date}']}
+                  for event in sorted(events, key=lambda e: e.date)]
     else:
         menues = [{"title": event.parent.name, "url": f"/watcher/{event.parent.id}",
                    "background": event_type_to_color(event.type),
@@ -339,3 +325,18 @@ def delete_event(request, event_id):
         messages.success(request, 'Event deleted successfully.')
         watchersInfo.reset()
         return redirect(request.META.get('HTTP_REFERER', '/'))
+
+
+def get_missing_events(request):
+    print("get_missing_events")
+    ret = []
+    # watchers that had specific event type was not found in the last 3 months
+    watchers = Watcher.objects.filter(user=request.user)
+    for watcher in watchers:
+        for event_type in [STATEMENT_EVENT_TYPE, DISTRIBUTION_EVENT_TYPE]:
+            events = watcher.events.filter(type=event_type)
+            if events:
+                last_event = events.order_by('-date').first()
+                if last_event.date < (datetime.now(timezone.utc) - timedelta(days=90)).date():
+                    ret.append(last_event)
+    return ret

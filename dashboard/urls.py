@@ -64,8 +64,6 @@ urlpatterns = [
          search_watchers, name='get_watchers_list'),
     path("watchers_plots_data/", watchers_plots_data, name='watchers_plots_data'),
     path("watcher_plots_data/", watcher_plots_data, name='watcher_plots_data'),
-    path("anomalous/", anomalous_watchers_view, name="anomalous_watchers"),
-    path("get_anomalous/", get_anomalous_watchers, name="anomalous_watchers"),
 
     # events
     path('events/<str:watcher_id>/', EventListView.as_view(), name='event-list'),
@@ -82,6 +80,7 @@ urlpatterns = [
     path('events/edit/<int:event_id>/',
          edit_event, name='delete_event'),
     path('events_cards/<str:order_by>', events_cards, name='events_cards'),
+
     # reports
     path('monthly_report/', report, name='monthly_report'),
 

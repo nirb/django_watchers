@@ -279,26 +279,3 @@ def watcher_plots_data(request):
         request.user.id, watcher_id, event_type)
 
     return JsonResponse(ret, safe=False)
-
-
-@login_required
-def anomalous_watchers_view(request):
-    return render(request, "watchers/anomalous_watchers.html", {})
-
-
-@login_required
-def get_anomalous_watchers(request):
-    ret = []
-    # watchers that had specific event type was not found in the last 3 months
-    watchers = Watcher.objects.filter(user=request.user)
-    for watcher in watchers:
-        for event_type in [STATEMENT_EVENT_TYPE, DISTRIBUTION_EVENT_TYPE]:
-            events = watcher.events.filter(type=event_type)
-            if events:
-                last_event = events.order_by('-date').first()
-                if last_event.date < (datetime.now(timezone.utc) - timedelta(days=90)).date():
-                    ret.append(
-                        {"watcher": watcher.name, 'watcher_id': watcher.id, "event_type": event_type, "last_date": str(last_event.date)})
-    ret.sort(key=lambda x: x["last_date"], reverse=False)
-    print("anomalous", json.dumps(ret, indent=2))
-    return JsonResponse(ret, safe=False)
