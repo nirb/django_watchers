@@ -301,7 +301,7 @@ def events_cards(request, order_by='-date'):
                    "items": [f"Value: {int_to_str(event.value, event.parent.currency)}", f"Unfunded: {watchersFin.get_watcher_info(event.parent.id)[UNFUNDED_STR]}"]}
                   for event in events]
     elif query_params[TYPE] == MISSING:
-        menues = [{"title": event.parent.name, "url": f"/watcher/{event.parent.id}",
+        menues = [{"title": event.parent.name + f" ({event.type})", "url": f"/watcher/{event.parent.id}",
                   "background": event_type_to_color(event.type),
                    "event_type": event.type,
                    "items": [f'Last Update: {event.date}']}
