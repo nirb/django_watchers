@@ -58,7 +58,7 @@ function generateCurrencyPlot(data, title, xaxis_title, yaxis_title, plot_id) {
     var trace = {
         x: dates,
         y: values,
-        mode: 'lines',
+        mode: 'lines+markers', // show dots on the plot
         type: 'scatter'
     };
 
