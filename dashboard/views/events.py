@@ -287,6 +287,10 @@ def events_cards(request, order_by='-date'):
             events = sorted(events, key=lambda e: int(watchersFin.get_watcher_info(
                 e.parent.id)[UNFUNDED]))
             page_name = "Unfunded Events"
+        elif query_params[TYPE] == WIRE:
+            page_name = f"{query_params[TYPE].capitalize()} Events"
+            events = get_historical_events(
+                request, [WIRE_RECEIPT_EVENT_TYPE], 12)
         else:
             page_name = f"{query_params[TYPE].upper()} Events"
             events = events.filter(type__icontains=query_params[TYPE])
@@ -294,25 +298,36 @@ def events_cards(request, order_by='-date'):
     if not isinstance(events, list):
         events = events.order_by(order_by)[:100]
 
-    if query_params[TYPE] == UNFUNDED:
-        menues = [{"title": event.parent.name, "url": f"/watcher/{event.parent.id}",
-                   "background": event_type_to_color(event.type),
-                   "event_type": event.type,
-                   "items": [f"Value: {int_to_str(event.value, event.parent.currency)}", f"Unfunded: {watchersFin.get_watcher_info(event.parent.id)[UNFUNDED_STR]}"]}
-                  for event in events]
-    elif query_params[TYPE] == MISSING:
-        menues = [{"title": event.parent.name + f" ({event.type})", "url": f"/watcher/{event.parent.id}",
-                  "background": event_type_to_color(event.type),
-                   "event_type": event.type,
-                   "items": [f'Last Update: {event.date}']}
-                  for event in sorted(events, key=lambda e: e.date)]
-    else:
+    menues = None
+    show_tabs = False
+    if TYPE in query_params:
+        if query_params[TYPE] == UNFUNDED:
+            menues = [{"title": event.parent.name, "url": f"/watcher/{event.parent.id}",
+                       "background": event_type_to_color(event.type),
+                       "event_type": event.type,
+                       "items": [f"Value: {int_to_str(event.value, event.parent.currency)}", f"Unfunded: {watchersFin.get_watcher_info(event.parent.id)[UNFUNDED_STR]}"]}
+                      for event in events]
+        elif query_params[TYPE] == MISSING:
+            menues = [{"title": event.parent.name + f" ({event.type})", "url": f"/watcher/{event.parent.id}",
+                       "background": event_type_to_color(event.type),
+                       "event_type": event.type,
+                       "items": [f'Last Update: {event.date}']}
+                      for event in sorted(events, key=lambda e: e.date)]
+        elif query_params[TYPE] == WIRE:
+            menues = [{"title": event.parent.name, "url": f"/watcher/{event.parent.id}",
+                       "background": event_type_to_color(event.type),
+                       "event_type": event.type,
+                       "items": [event.date, f'{int_to_str(event.value, event.parent.currency)}']}
+                      for event in sorted(events, key=lambda e: e.date)]
+    if menues is None:
+        show_tabs = True
         menues = [{"title": event.parent.name, "url": f"/watcher/{event.parent.id}",
                    "background": event_type_to_color(event.type),
                    "event_type": event.type,
                    "items": [event.date, event.type, int_to_str(event.value, event.parent.currency)]}
                   for event in sorted(events, key=lambda e: e.type)]
-    return render(request, 'menues/cards_menu.html', {"menues": menues, "page_name": page_name, "show_tabs": True if unfunded_ids is None else False})
+    print(f"events_cards {show_tabs=}")
+    return render(request, 'menues/cards_menu.html', {"menues": menues, "page_name": page_name, "show_tabs": show_tabs})
 
 
 @login_required
@@ -339,4 +354,19 @@ def get_missing_events(request):
                 last_event = events.order_by('-date').first()
                 if last_event.date < (datetime.now(timezone.utc) - timedelta(days=90)).date():
                     ret.append(last_event)
+    return ret
+
+
+def get_historical_events(request, events_types, number_of_months=12):
+    print("get_historical_events")
+    ret = []
+    # watchers that had specific event type was not found in the last 3 months
+    watchers = Watcher.objects.filter(user=request.user)
+    for watcher in watchers:
+        for event_type in events_types:
+            events = watcher.events.filter(type=event_type)
+            if events:
+                for event in events:
+                    if event.date > (datetime.now(timezone.utc) - timedelta(days=30*number_of_months)).date():
+                        ret.append(event)
     return ret
