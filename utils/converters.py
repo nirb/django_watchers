@@ -109,9 +109,9 @@ def event_type_to_color(event_type):
         return "statement-color"
     elif event_type == DISTRIBUTION_EVENT_TYPE:
         return "distribution-color"
-    elif event_type == "Distribution Notice":
+    elif event_type == DISTRIBUTION_NOTICE:
         return "distribution-notice-color"
-    elif event_type == "Capital Call Notice":
+    elif event_type == CAPITAL_CALL_NOTICE:
         return "capital-call-color"
     elif event_type == WIRE_RECEIPT_EVENT_TYPE:
         return "wire-receipt-color"
